@@ -1,0 +1,2 @@
+# wesplit
+Split your expenses
