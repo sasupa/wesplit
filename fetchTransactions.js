@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
 async function fetchTransactions() {
     try {
         // Replace with the correct URL to your server's API endpoint
-        const response = await fetch('https://psychedelic-inconclusive-antelope.glitch.me/api/transactions/');
+        const response = await fetch('https://wesplit-backend.glitch.me/api/transactions/');
         
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
