@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
 async function fetchTransactions() {
     try {
         // Replace with the correct URL to your server's API endpoint
-        const response = await fetch('https://wesplit-backend.glitch.me/api/transactions/');
+        const response = await fetch('https://wesplit-backend.glitch.me/api/transactions/group/6590143d103731c6c46a9d9a');
         
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
