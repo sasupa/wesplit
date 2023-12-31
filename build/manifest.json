@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "WeSplit",
+  "name": "Split you expenses with friends and family",
   "icons": [
     {
       "src": "favicon.ico",
