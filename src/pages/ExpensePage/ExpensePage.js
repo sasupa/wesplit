@@ -1,14 +1,28 @@
 // ExpensePage.js
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import Footer from "../../components/Footer/Footer";
 
 const ExpensePage = () => {
+  const [splitManually, setSplitManually] = useState(false);
+
   // Handle form submission
   const handleSubmit = (event) => {
     event.preventDefault();
-    // Add your form submission logic here
-    console.log("Form submitted!");
+    const formData = new FormData(event.target);
+    const data = {
+      description: formData.get("description"),
+      amount: formData.get("amount"),
+      paymentOption: formData.get("paymentOption"),
+      yourShare: formData.get("yourShare") || null,
+      member2Share: formData.get("member2Share") || null,
+    };
+    console.log("Expense submitted:", data);
+  };
+
+  // Handle change in payment option
+  const handlePaymentOptionChange = (event) => {
+    setSplitManually(event.target.value === "enterSplitManually");
   };
 
   return (
@@ -43,7 +57,12 @@ const ExpensePage = () => {
 
             <Form.Group>
               <Form.Label htmlFor="paymentOption">Payment Option:</Form.Label>
-              <Form.Control as="select" id="paymentOption" name="paymentOption">
+              <Form.Control
+                as="select"
+                id="paymentOption"
+                name="paymentOption"
+                onChange={handlePaymentOptionChange}
+              >
                 <option value="paidByYou">Paid by you and split equally</option>
                 <option value="paidByOther">
                   Paid by other and split equally
@@ -51,6 +70,36 @@ const ExpensePage = () => {
                 <option value="enterSplitManually">Enter split manually</option>
               </Form.Control>
             </Form.Group>
+
+            {splitManually && (
+              <>
+                <Form.Group>
+                  <Form.Label htmlFor="yourShare">Your Share (€):</Form.Label>
+                  <Form.Control
+                    type="number"
+                    id="yourShare"
+                    name="yourShare"
+                    placeholder="0.00"
+                    min="0"
+                    step="0.01"
+                  />
+                </Form.Group>
+
+                <Form.Group>
+                  <Form.Label htmlFor="member2Share">
+                    Member 2 Share (€):
+                  </Form.Label>
+                  <Form.Control
+                    type="number"
+                    id="member2Share"
+                    name="member2Share"
+                    placeholder="0.00"
+                    min="0"
+                    step="0.01"
+                  />
+                </Form.Group>
+              </>
+            )}
 
             <Button variant="primary" type="submit">
               Submit
