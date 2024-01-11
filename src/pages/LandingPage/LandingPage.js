@@ -1,23 +1,23 @@
-import React from "react";
-import { Container, Row, Col, Button, Image } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import React from 'react';
+import { Container, Row, Col, Button, Image } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
 const LandingPage = () => {
   return (
     <Container
       style={{
-        backgroundColor: "#f8f9fa",
-        minHeight: "100vh",
-        paddingTop: "50px",
+        backgroundColor: '#f8f9fa',
+        minHeight: '100vh',
+        paddingTop: '50px',
       }}
     >
-      <Row className="justify-content-center">
-        <Col md={6} className="text-center">
+      <Row className='justify-content-center'>
+        <Col md={6} className='text-center'>
           {/* Logo */}
           <Image
-            src="https://sasupa.github.io/wesplit/logo512.png"
-            alt="WeSplit Logo"
-            style={{ maxWidth: "200px" }}
+            src='https://sasupa.github.io/wesplit/logo512.png'
+            alt='WeSplit Logo'
+            style={{ maxWidth: '200px' }}
           />
 
           {/* Heading */}
@@ -28,13 +28,13 @@ const LandingPage = () => {
 
           {/* Buttons */}
           <div>
-            <Link to="/groups">
-              <Button variant="primary" className="m-2">
+            <Link to='/groups'>
+              <Button variant='primary' className='m-2'>
                 Login
               </Button>
             </Link>
 
-            <Button variant="secondary" className="m-2">
+            <Button variant='secondary' className='m-2'>
               Sign Up
             </Button>
           </div>
