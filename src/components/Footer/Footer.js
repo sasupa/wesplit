@@ -10,17 +10,17 @@ const Footer = () => {
       <Row>
         <Col className="text-center py-2">
           <Link to="/groups">
-            <i className="fa fa-users" aria-hidden="true"></i>
+            <i className="fa fa-users fa-2x" aria-hidden="true"></i>
           </Link>
         </Col>
         <Col className="text-center py-2">
           <Link to="/settings">
-            <i className="fa fa-cog" aria-hidden="true"></i>
+            <i className="fa fa-cog fa-2x" aria-hidden="true"></i>
           </Link>
         </Col>
         <Col className="text-center py-2">
           <Link to="/">
-            <i className="fa fa-sign-out" aria-hidden="true"></i>
+            <i className="fa fa-sign-out fa-2x" aria-hidden="true"></i>
           </Link>
         </Col>
       </Row>
