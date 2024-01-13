@@ -3,7 +3,7 @@ import React from 'react';
 import { Card } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 
-const GroupCard = ({ groupId, groupName, members }) => {
+const GroupCard = ({ groupId, groupName, m1, m1b, m2, m2b }) => {
     const navigate = useNavigate();
     const handleCardClick = () => {
         navigate(`/expenses/${groupId}`);
@@ -13,11 +13,12 @@ const GroupCard = ({ groupId, groupName, members }) => {
     <Card className="my-3" onClick={handleCardClick}>
       <Card.Header>{groupName}</Card.Header>
       <Card.Body>
-        {members.map((member, index) => (
-          <div key={index} className="mb-2">
-            <strong>{member.name}:</strong> Balance: {member.balance}€
+          <div className="mb-2">
+            <strong>{m1}:</strong> Balance: {m1b}€
           </div>
-        ))}
+          <div className="mb-2">
+            <strong>{m2}:</strong> Balance: {m2b}€
+          </div>
       </Card.Body>
     </Card>
   );
