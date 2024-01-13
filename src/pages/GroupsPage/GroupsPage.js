@@ -29,7 +29,7 @@ const GroupsPage = () => {
         name: "Muppelo",
       },
     ]);
-  });
+  },[]);
 
   {/* THIS IS FOR PRODUCTION
   useEffect(() => {

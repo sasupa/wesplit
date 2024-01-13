@@ -28,15 +28,17 @@ const LandingPage = () => {
 
           {/* Buttons */}
           <div>
-            <Link to='/groups'>
+            <Link to='/login'>
               <Button variant='primary' className='m-2'>
                 Login
               </Button>
             </Link>
 
+            <Link to='/signup'>
             <Button variant='secondary' className='m-2'>
               Sign Up
             </Button>
+            </Link>
           </div>
         </Col>
       </Row>

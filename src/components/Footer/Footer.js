@@ -1,10 +1,17 @@
-// Footer.js
 import React from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import 'font-awesome/css/font-awesome.min.css';
+import { useNavigate } from "react-router-dom"; // Import useHistory
 
 const Footer = () => {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem('jwtToken');
+    console.log("Logged out");
+  };
+
   return (
     <Container fluid className="bg-light fixed-bottom">
       <Row>
@@ -19,7 +26,7 @@ const Footer = () => {
           </Link>
         </Col>
         <Col className="text-center py-2">
-          <Link to="/">
+          <Link onClick={handleLogout} to="/">
             <i className="fa fa-sign-out fa-2x" aria-hidden="true"></i>
           </Link>
         </Col>
