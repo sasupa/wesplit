@@ -1,0 +1,41 @@
+.form-container {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.submit-button {
+  margin-top: 10px; /* Add more margin to the top */
+  width: 100%;
+}
+
+.full-height-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.fixed-height-container {
+  max-height: 400px; /* Set a fixed maximum height for the container */
+  overflow: auto; /* Enable vertical scrollbar if needed */
+}
+/* Additional style for the title */
+.form-container h2 {
+  text-align: center;
+  margin-bottom: 20px; /* Adjust the margin as needed */
+}
+
+.register-link {
+  margin-top: 10px;
+}
+
+.register-link span {
+  color: #333;
+}
+
+.register-link a {
+  color: #007bff;
+  text-decoration: none;
+}
