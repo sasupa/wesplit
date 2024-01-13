@@ -37,8 +37,9 @@ const GroupsPage = () => {
       ) : (
         <div>
           {/* Display groups result */}
-          {groups.map((group) => (
+          {groups.map((group, index) => (
             <GroupCard
+              key={index}
               groupId={group._id}
               groupName={group.name}
               m1={group.member1}

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { fetchGroups, fetchGroupTransactions } from "../../utils/apiUtils";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import Footer from "../../components/Footer/Footer.js";
 import UserCard from "../../components/UserCard/UserCard.js";
@@ -61,8 +62,9 @@ const GroupPage = () => {
         <Col md={6}>
           <h2>Latest transactions in {group.name}</h2>
           <br></br>
-          {group.transactions.map((transaction) => (
+          {group.transactions.map((transaction, index) => (
             <Transaction
+              key={index}
               amount={transaction.amount}
               description={transaction.description}
             />
