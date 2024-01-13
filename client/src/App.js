@@ -1,9 +1,9 @@
 import React from 'react';
 import { HashRouter as Router, Route, Routes } from 'react-router-dom';
-import LandingPage from './pages/LandingPage/LandingPage';
-import GroupPage from './pages/GroupPage/GroupPage';
-import SettingsPage from './pages/SettingsPage/SettingsPage';
-import GroupsPage from './pages/GroupsPage/GroupsPage';
+import LandingPage from './pages/LandingPage/LandingPage.js';
+import GroupPage from './pages/GroupPage/GroupPage.js';
+import SettingsPage from './pages/SettingsPage/SettingsPage.js';
+import GroupsPage from './pages/GroupsPage/GroupsPage.js';
 import './App.css';
 import LoginPage from './pages/LoginPage/LoginPage.jsx';
 import SignUpPage from './pages/SignUpPage/SignUpPage.jsx';
