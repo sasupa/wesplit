@@ -10,6 +10,7 @@ import "./GroupPage.css";
 
 const GroupPage = () => {
   {
+    /* JÄI KESKEN, PITÄÄ TEHDÄ REITTI JOLLA HAKEE GROUPIN VAIKKA LOCAL STORAGEEN TAI STATEEN JA SIT POPULOI SIVUN
     /* group must be added to AddExpense as a prop – this is just a demo  */
   }
   const group = {
