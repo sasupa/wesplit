@@ -6,9 +6,16 @@ const TransactionSchema = new mongoose.Schema(
     amount: mongoose.Types.Decimal128,
     divisionType: {
       type: String,
-      enum: ['Paid by you and split equally', 'manual sum split'],
+      enum: ['split equally', 'manual division', 'checkout'],
     },
     creator: mongoose.Types.ObjectId,
+    payer: mongoose.Types.ObjectId,
+    shares: [
+      {
+        shareholderId: mongoose.Types.ObjectId,
+        share: mongoose.Types.Decimal128,
+      },
+    ],
   },
   { timestamps: true }
 );
