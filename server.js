@@ -11,6 +11,7 @@ dotenv.config();
 // router file importing here
 import testRouter from './routes/testRouter.js';
 import groupRouter from './routes/groupRouter.js';
+import transactionRouter from './routes/transactionsRouter.js';
 
 //middleware
 import errorHandlerMiddleware from './middleware/errorHandlerMiddleware.js';
@@ -31,6 +32,7 @@ app.get('/', (req, res) => {
 //app.use('/api/v1/jobs', jobRouter);
 app.use('/wesplit/api/v1/test', testRouter);
 app.use('/wesplit/api/v1/group', groupRouter);
+app.use('/wesplit/api/v1/transactions', transactionRouter);
 
 // Not Found Middleware
 app.use('*', (req, res) => {
