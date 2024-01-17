@@ -1,3 +1,5 @@
+// User model
+
 import mongoose from 'mongoose';
 
 const UserSchema = new mongoose.Schema({
@@ -13,6 +15,7 @@ const UserSchema = new mongoose.Schema({
     enum: ['user', 'admin'],
     default: 'user',
   },
+  activity: [{ type: mongoose.Types.ObjectId, ref: 'Transaction' }],
 });
 
 export default mongoose.model('User', UserSchema);
