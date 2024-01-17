@@ -1,6 +1,8 @@
 import mongoose from 'mongoose';
 
-const TransactionSchema = new mongoose.Schema(
+const { Schema } = mongoose;
+
+const TransactionSchema = new Schema(
   {
     description: String,
     amount: mongoose.Types.Decimal128,
@@ -8,11 +10,11 @@ const TransactionSchema = new mongoose.Schema(
       type: String,
       enum: ['split equally', 'manual division', 'checkout'],
     },
-    creator: mongoose.Types.ObjectId,
-    payer: mongoose.Types.ObjectId,
+    creator: { type: Schema.Types.ObjectId, ref: 'User' }, //Debug: used to be mongoose.Types.ObjectId
+    payer: { type: Schema.Types.ObjectId, ref: 'User' },
     shares: [
       {
-        shareholderId: mongoose.Types.ObjectId,
+        shareholderId: { type: Schema.Types.ObjectId, ref: 'User' }, // Debug
         share: mongoose.Types.Decimal128,
       },
     ],
