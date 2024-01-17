@@ -1,10 +1,10 @@
 // apiUtils.js
-const BASE_URL = "https://wesplit-backend.glitch.me/api";
+const BASE_URL = "http://localhost:5100/wesplit/api/v1";
 
 // Function to test API
 export const testAPI = async () => {
   try {
-    const response = await fetch(`${BASE_URL}/test`, { method: 'GET' });
+    const response = await fetch(`http://localhost:5100/`, { method: 'GET' });
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
@@ -20,7 +20,7 @@ export const testAPI = async () => {
 // Function to fetch groups
 export const fetchGroups = async () => {
   try {
-    const response = await fetch(`${BASE_URL}/groups/`);
+    const response = await fetch(`${BASE_URL}/group/user/65a7f98cf94114267cda436e`);
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
