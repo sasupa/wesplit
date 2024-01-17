@@ -8,6 +8,13 @@ export const getTested = async (req, res) => {
   res.status(StatusCodes.OK).json({ message });
 };
 
+export const getUser = async (req, res) => {
+  const user = req.userWithTransactions; // Use the user with transactions from the middleware
+  console.log(user);
+
+  res.status(StatusCodes.OK).json({ user });
+};
+
 export const getTransactions = async (req, res) => {
   const transactions = await Transaction.find({}); //{filter} --> only all matching
   res.status(StatusCodes.OK).json({ transactions });

@@ -6,11 +6,11 @@ const TransactionSchema = new mongoose.Schema(
     amount: mongoose.Types.Decimal128,
     divisionType: {
       type: String,
-      enum: ['Paid by you and split equally', 'manual sum split'], //Needs update
+      enum: ['Paid by you and split equally', 'manual sum split'],
     },
     creator: mongoose.Types.ObjectId,
   },
-  { timestamps: true } //adds createdAt, updatedAt...);
+  { timestamps: true }
 );
 
 export default mongoose.model('Transaction', TransactionSchema);
