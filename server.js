@@ -3,9 +3,11 @@ import * as dotenv from 'dotenv';
 import express from 'express';
 import morgan from 'morgan'; //logs requests and their status to console
 import mongoose from 'mongoose';
+import cors from 'cors'; // allow cross-origin requests
 
 //inits
 const app = express();
+app.use(cors()); // allow cross-origin requests
 dotenv.config();
 
 // router file importing here

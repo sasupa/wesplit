@@ -14,8 +14,8 @@ const GroupsPage = () => {
   useEffect(() => {
     fetchGroups()
       .then((data) => {
-        console.log(data);
-        setGroups(data);
+        console.log(data.groups);
+        setGroups(data.groups);
         setLoading(false); // Set loading to false when data is received
       })
       .catch((error) => {
@@ -42,10 +42,10 @@ const GroupsPage = () => {
               key={index}
               groupId={group._id}
               groupName={group.name}
-              m1={group.member1}
-              m1b={parseFloat(group.member1balance.$numberDecimal)}
-              m2={group.member2}
-              m2b={parseFloat(group.member2balance.$numberDecimal)}
+              m1={group.members[0].userId}
+              m1b={parseFloat(group.members[0].balance)}
+              m2={group.members[0].userId}
+              m2b={parseFloat(group.members[0].balance)}
             />
           ))}
         </div>
