@@ -1,14 +1,16 @@
-import React from 'react';
-import { Container, Row, Col } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
-import 'font-awesome/css/font-awesome.min.css';
+import React, { useContext } from "react";
+import { Container, Row, Col } from "react-bootstrap";
+import { Link } from "react-router-dom";
+import "font-awesome/css/font-awesome.min.css";
 import { useNavigate } from "react-router-dom"; // Import useHistory
+import { Context } from "../../Context";
 
 const Footer = () => {
   const navigate = useNavigate();
+  const { contextValue, updateContextValue } = useContext(Context);
 
   const handleLogout = () => {
-    localStorage.removeItem('jwtToken');
+    localStorage.removeItem("jwtToken");
     console.log("Logged out");
   };
 
@@ -29,6 +31,11 @@ const Footer = () => {
           <Link onClick={handleLogout} to="/">
             <i className="fa fa-sign-out fa-2x" aria-hidden="true"></i>
           </Link>
+        </Col>
+      </Row>
+      <Row>
+        <Col className="text-center py-2">
+          <small>{contextValue[0].name} | Developer: {contextValue[0].developer} | {contextValue[0].year} </small>
         </Col>
       </Row>
     </Container>

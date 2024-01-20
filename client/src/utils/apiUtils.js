@@ -1,22 +1,6 @@
 // apiUtils.js
 const BASE_URL = "http://localhost:5100/wesplit/api/v1";
 
-// Function to test API
-export const testAPI = async () => {
-  try {
-    const response = await fetch(`http://localhost:5100/`, { method: 'GET' });
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    const data = await response.json();
-    return data;  // Return the list of groups
-  } catch (error) {
-    console.error("Test failed", error);
-    // You might want to handle the error differently depending on your app's needs
-    throw error;
-  }
-};
-
 // Function to fetch groups
 // !!! TÄSSÄ KOVAKOODATTUNA VIELÄ ETTÄ HAKEE SASUN RYHMÄT, KOSKA EI VIELÄ LOG IN FUKTIOO JOSTA SAIS KÄYTTÄJÄN ID:N
 export const fetchGroups = async () => {
@@ -60,6 +44,22 @@ export const fetchGroupTransactions = async (groupID) => {
     return data;  // Return the list of groups
   } catch (error) {
     console.error("Failed to fetch groups:", error);
+    // You might want to handle the error differently depending on your app's needs
+    throw error;
+  }
+};
+
+// Function to test API
+export const testAPI = async () => {
+  try {
+    const response = await fetch(`http://localhost:5100/`, { method: 'GET' });
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const data = await response.json();
+    return data;  // Return the list of groups
+  } catch (error) {
+    console.error("Test failed", error);
     // You might want to handle the error differently depending on your app's needs
     throw error;
   }
