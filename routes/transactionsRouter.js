@@ -4,13 +4,12 @@ import {
   getTransactions,
   createTransaction,
 } from '../controllers/transactionController.js';
+import { transactionsPopulateMiddleware } from '../middleware/transactionsPopulateMiddleware.js';
+import { validateTransactionInput } from '../middleware/validationMiddleware.js';
 
-router.route('/').get(getTransactions).post(createTransaction);
-
-//router.get('/', getTransactions);
-// router.get('/getTransactions', getTransactions);
-// router.post('/createTransaction', createTransaction);
-// router.post('/createUser', createUser);
-// router.get('/getUser', populateActivityMiddleware, getUser);
+router
+  .route('/')
+  .get(transactionsPopulateMiddleware, getTransactions)
+  .post(validateTransactionInput, createTransaction);
 
 export default router;
