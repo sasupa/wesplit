@@ -3,14 +3,18 @@ import Transaction from '../models/transactionModel.js';
 
 //GET ALL TRANSACTIONS
 export const getTransactions = async (req, res) => {
-  const transactions = await Transaction.find({}); //{filter} --> only all matching
-  res.status(StatusCodes.OK).json({ transactions });
+  const transactions = req.populatedTransactions; //{filter} --> only all matching
+  res.status(StatusCodes.OK).json(transactions);
 };
 
 //CREATE NEW TRANSACTION
 export const createTransaction = async (req, res) => {
   //Validation middleware missing still. Create that.
   const data = req.body;
+  console.log(data);
+
+  //We can eliminate try catch after we have validation!
+
   try {
     // Use object destructuring to directly pass the properties of data
     const newTransaction = await Transaction.create({ ...data });
