@@ -42,10 +42,7 @@ const GroupsPage = () => {
               key={index}
               groupId={group._id}
               groupName={group.name}
-              m1={group.members[0].userId}
-              m1b={parseFloat(group.members[0].balance)}
-              m2={group.members[0].userId}
-              m2b={parseFloat(group.members[0].balance)}
+              members={group.members}
             />
           ))}
         </div>

@@ -2,19 +2,9 @@ import { StatusCodes } from "http-status-codes";
 import Group from "../models/groupModel.js";
 
 export const getGroupsWithUserId = async (req, res) => {
-  try {
-    const userId = req.params.id;
-
-    // MongoDB query to find groups where the userId is in the members.userId array
-    const groups = await Group.find({ "members.userId": userId });
-
-    res.status(StatusCodes.OK).json({ groups });
-  } catch (error) {
-    // Handle any errors that might occur during the database query
-    res
-      .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .json({ error: error.message });
-  }
+  const groups = req.populatedGroups; // Use the populated group from the middleware
+  console.log(groups);
+  res.status(StatusCodes.OK).json({ groups });
 };
 
 export const getPopulatedGroupWithGroupId = async (req, res) => {
