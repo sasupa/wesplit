@@ -4,6 +4,7 @@ import express from 'express';
 import morgan from 'morgan'; //logs requests and their status to console
 import mongoose from 'mongoose';
 import cors from 'cors'; // allow cross-origin requests
+import cookieParser from 'cookie-parser';
 
 //inits
 const app = express();
@@ -14,14 +15,19 @@ dotenv.config();
 import testRouter from './routes/testRouter.js';
 import groupRouter from './routes/groupRouter.js';
 import transactionRouter from './routes/transactionsRouter.js';
+import authRouter from './routes/authRoutes.js';
 
 //middleware
 import errorHandlerMiddleware from './middleware/errorHandlerMiddleware.js';
+import { authenticateUser } from './middleware/authMiddleware.js';
 
 //initing MORGAN to be used *only* in dev environment
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
+
+//Cookies init
+app.use(cookieParser());
 
 //MW for accepting JSON
 app.use(express.json());
@@ -34,7 +40,8 @@ app.get('/', (req, res) => {
 //app.use('/api/v1/jobs', jobRouter);
 app.use('/wesplit/api/v1/test', testRouter);
 app.use('/wesplit/api/v1/group', groupRouter);
-app.use('/wesplit/api/v1/transactions', transactionRouter);
+app.use('/wesplit/api/v1/transactions', authenticateUser, transactionRouter);
+app.use('/wesplit/api/v1/auth', authRouter);
 
 // Not Found Middleware
 app.use('*', (req, res) => {
