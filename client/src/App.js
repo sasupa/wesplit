@@ -8,6 +8,7 @@ import LandingPage from './pages/LandingPage/LandingPage.js';
 import Error from './pages/ErrorPage.jsx';
 import Login from './pages/LoginPage/LoginPage.jsx';
 import GroupPageLayout from './pages/GroupPageLayout.jsx';
+import Register from './pages/RegisterPage.jsx';
 
 import { loader as groupsPageLoader } from './pages/GroupPageLayout.jsx';
 
@@ -36,7 +37,10 @@ const router = createBrowserRouter([
         path: 'login',
         element: <Login />,
       },
-      //TÄHÄN REGISTER VIELÄ
+      {
+        path: 'register',
+        element: <Register />,
+      },
       {
         path: 'groups',
         element: <GroupPageLayout />,

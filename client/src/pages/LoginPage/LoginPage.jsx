@@ -43,16 +43,6 @@ const LoginPage = () => {
     }
   };
 
-  // const navigate = useNavigate();
-
-  // useEffect(() => {
-  //   const token = localStorage.getItem("jwtToken");
-  //   if (token) {
-  //     console.log("There's a token");
-  //     navigate("/groups"); // Change  to the desired route
-  //   }
-  // });
-
   return (
     <LoginForm
       submission={onSubmit}
@@ -63,37 +53,3 @@ const LoginPage = () => {
 };
 
 export default LoginPage;
-
-/* DUMMY CALL FOR RREFERNCE *****
-
-
-const onSubmit = async (values, { setSubmitting }) => {
-  try {
-    // Dummy API call
-    const response = await axios.post('https://api.example.com/login', values);
-
-    // Assuming the API returns a token
-    const { token } = response.data;
-
-    // Store the token in localStorage
-    localStorage.setItem('token', token);
-
-    // Your form submission logic goes here
-
-    console.log('API Response:', response.data);
-  } catch (error) {
-    // Handle API call error
-    console.error(
-      'API Error:',
-      error.response ? error.response.data : error.message
-    );
-  } finally {
-    setSubmitting(false);
-  }
-};
-
-
-
-
-
-*/

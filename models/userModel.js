@@ -18,4 +18,10 @@ const UserSchema = new mongoose.Schema({
   activity: [{ type: mongoose.Types.ObjectId, ref: 'Transaction' }],
 });
 
+UserSchema.methods.toJSON = function () {
+  let obj = this.toObject();
+  delete obj.password;
+  return obj;
+};
+
 export default mongoose.model('User', UserSchema);
