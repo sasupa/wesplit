@@ -6,9 +6,15 @@ import mongoose from 'mongoose';
 import cors from 'cors'; // allow cross-origin requests
 import cookieParser from 'cookie-parser';
 
+const corsOptions = {
+  origin: 'http://localhost:3000',
+  credentials: true,
+};
+
 //inits
 const app = express();
-app.use(cors()); // allow cross-origin requests
+app.use(cors(corsOptions));
+//app.use(cors()); // allow cross-origin requests
 dotenv.config();
 
 // router file importing here

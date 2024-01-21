@@ -5,6 +5,9 @@ import { useNavigate } from 'react-router-dom'; // Import useHistory
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
+import { login } from '../../utils/apiUtils';
+import { toast } from 'react-toastify';
 
 const LoginPage = () => {
   //Inits
@@ -26,21 +29,18 @@ const LoginPage = () => {
 
   //Submit handler – axios example at the bottom
   const onSubmit = async (values, { setSubmitting, resetForm }) => {
-    //Token acceptance dummy
-    const token = 'jwt_token_dummy';
-
-    //Storing token
-    localStorage.setItem('jwt_token', token);
-
-    //TEST
-    console.log({ user: values, token: token });
-    console.log(email, initialValues);
-
-    //Navigation Dummy
-    navigate('/groups');
-
-    resetForm();
-    setSubmitting(false);
+    try {
+      const data = await login(values);
+      console.log(data);
+      toast.success('Login successful');
+      navigate('/groups');
+      resetForm();
+      setSubmitting(false);
+    } catch (error) {
+      toast.error(error?.response?.data?.msg);
+      resetForm();
+      return error;
+    }
   };
 
   // const navigate = useNavigate();
