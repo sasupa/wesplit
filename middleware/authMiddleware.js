@@ -7,12 +7,16 @@ import { verifyJWT } from '../utils/tokenUtils.js';
 
 //Protects Transaction routes as an example --> server.js
 export const authenticateUser = (req, res, next) => {
+  // console.log('täällä!');
+  // console.log(req.cookies.token);
+
   const { token } = req.cookies;
+  console.log(token);
   if (!token) throw new UnauthenticatedError('authentication invalid');
 
   try {
     const { userId, role } = verifyJWT(token);
-    const testUser = userId === '64b2c07ccac2efc972ab0eca';
+    const testUser = userId === '65acc42dca2a405adca0efa3';
     req.user = { userId, role, testUser };
     next();
   } catch (error) {

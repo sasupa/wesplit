@@ -71,15 +71,10 @@ export const testAPI = async () => {
 
 // Function to test API
 export const login = async (values) => {
-  console.log(values);
-
   try {
     const response = await axios.post(`${BASE_URL}/auth/login`, values, {
       withCredentials: true,
     });
-
-    // Log only necessary information (e.g., status and a part of the data)
-    console.log({ status: response.status, responseData: response.data });
 
     if (response.status >= 200 && response.status < 300) {
       return response.data; // You might want to return specific data from the response

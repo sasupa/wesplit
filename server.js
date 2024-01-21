@@ -21,7 +21,8 @@ dotenv.config();
 import testRouter from './routes/testRouter.js';
 import groupRouter from './routes/groupRouter.js';
 import transactionRouter from './routes/transactionsRouter.js';
-import authRouter from './routes/authRoutes.js';
+import authRouter from './routes/authRouter.js';
+import userRouter from './routes/userRouter.js';
 
 //middleware
 import errorHandlerMiddleware from './middleware/errorHandlerMiddleware.js';
@@ -48,6 +49,7 @@ app.use('/wesplit/api/v1/test', testRouter);
 app.use('/wesplit/api/v1/group', groupRouter);
 app.use('/wesplit/api/v1/transactions', authenticateUser, transactionRouter);
 app.use('/wesplit/api/v1/auth', authRouter);
+app.use('/wesplit/api/v1/users', authenticateUser, userRouter);
 
 // Not Found Middleware
 app.use('*', (req, res) => {
