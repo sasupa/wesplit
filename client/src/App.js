@@ -3,7 +3,6 @@
 
 import React from 'react';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
-
 import LandingPage from './pages/LandingPage/LandingPage.js';
 import Error from './pages/ErrorPage.jsx';
 import Login from './pages/LoginPage/LoginPage.jsx';
@@ -16,7 +15,6 @@ import GroupPage from './pages/GroupPage/GroupPage.js';
 import SettingsPage from './pages/SettingsPage/SettingsPage.js';
 import GroupsPage from './pages/GroupsPage/GroupsPage.js';
 import './App.css';
-import LoginPage from './pages/LoginPage/LoginPage.jsx';
 import SignUpPage from './pages/SignUpPage/SignUpPage.jsx';
 import { ContextProvider } from './Context.js';
 import HomeLayout from './pages/HomeLayout.jsx';

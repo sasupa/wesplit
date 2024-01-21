@@ -6,7 +6,7 @@ export const Context = createContext();
 export const ContextProvider = ({ children }) => {
   const [contextValue, setContextValue] = useState([
     // BASIC APP GLOBAL VARIABLES
-    { name: "WeSplit", developer: "Jani&Sasu", year: "2024" },
+    { name: "WeSplit", developer: "Jani&Sasu", year: "2024", darkMode: false },
     // USER PLACEHOLDER
     {},
     // GROUP PLACEHOLDER

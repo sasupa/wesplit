@@ -3,12 +3,11 @@ import axios from 'axios';
 // apiUtils.js
 const BASE_URL = 'http://localhost:5100/wesplit/api/v1';
 
-// Function to fetch groups
-// !!! TÄSSÄ KOVAKOODATTUNA VIELÄ ETTÄ HAKEE SASUN RYHMÄT, KOSKA EI VIELÄ LOG IN FUKTIOO JOSTA SAIS KÄYTTÄJÄN ID:N
-export const fetchGroups = async () => {
+// Function to fetch groups with userId
+export const fetchGroups = async (id) => {
   try {
     const response = await fetch(
-      `${BASE_URL}/group/user/65aaf7caa582eea1a7947db8`
+      `${BASE_URL}/group/user/${id}`
     );
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
@@ -94,6 +93,22 @@ export const register = async (values) => {
     const response = await axios.post(`${BASE_URL}/auth/register`, values, {
       withCredentials: true,
     });
+
+    if (response.status >= 200 && response.status < 300) {
+      return response.data; // You might want to return specific data from the response
+    } else {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+  } catch (error) {
+    console.error('Something failed', error.message);
+    // You might want to handle the error differently depending on your app's needs
+    throw error;
+  }
+};
+
+export const logout = async () => {
+  try {
+    const response = await axios.get(`${BASE_URL}/auth/logout`);
 
     if (response.status >= 200 && response.status < 300) {
       return response.data; // You might want to return specific data from the response
