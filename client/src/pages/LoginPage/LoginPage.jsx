@@ -5,6 +5,9 @@ import { useNavigate } from 'react-router-dom'; // Import useHistory
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
+import { login } from '../../utils/apiUtils';
+import { toast } from 'react-toastify';
 
 const LoginPage = () => {
   //Inits
@@ -26,32 +29,19 @@ const LoginPage = () => {
 
   //Submit handler – axios example at the bottom
   const onSubmit = async (values, { setSubmitting, resetForm }) => {
-    //Token acceptance dummy
-    const token = 'jwt_token_dummy';
-
-    //Storing token
-    localStorage.setItem('jwt_token', token);
-
-    //TEST
-    console.log({ user: values, token: token });
-    console.log(email, initialValues);
-
-    //Navigation Dummy
-    navigate('/groups');
-
-    resetForm();
-    setSubmitting(false);
+    try {
+      const data = await login(values);
+      console.log(data);
+      toast.success('Login successful');
+      navigate('/groups');
+      resetForm();
+      setSubmitting(false);
+    } catch (error) {
+      toast.error(error?.response?.data?.msg);
+      resetForm();
+      return error;
+    }
   };
-
-  // const navigate = useNavigate();
-
-  // useEffect(() => {
-  //   const token = localStorage.getItem("jwtToken");
-  //   if (token) {
-  //     console.log("There's a token");
-  //     navigate("/groups"); // Change  to the desired route
-  //   }
-  // });
 
   return (
     <LoginForm
@@ -63,37 +53,3 @@ const LoginPage = () => {
 };
 
 export default LoginPage;
-
-/* DUMMY CALL FOR RREFERNCE *****
-
-
-const onSubmit = async (values, { setSubmitting }) => {
-  try {
-    // Dummy API call
-    const response = await axios.post('https://api.example.com/login', values);
-
-    // Assuming the API returns a token
-    const { token } = response.data;
-
-    // Store the token in localStorage
-    localStorage.setItem('token', token);
-
-    // Your form submission logic goes here
-
-    console.log('API Response:', response.data);
-  } catch (error) {
-    // Handle API call error
-    console.error(
-      'API Error:',
-      error.response ? error.response.data : error.message
-    );
-  } finally {
-    setSubmitting(false);
-  }
-};
-
-
-
-
-
-*/

@@ -1,9 +1,10 @@
 import { body, param, validationResult } from 'express-validator';
 import { BadRequestError, NotFoundError } from '../errors/customErrors.js';
 import mongoose from 'mongoose';
+import User from '../models/userModel.js';
 
 // import Job from '../models/jobModel.js';
-// import User from '../models/userModel.js';
+
 // import mongoose from 'mongoose';
 
 const withValidationErrors = (validateValues) => {
@@ -54,7 +55,6 @@ export const validateRegisterInput = withValidationErrors([
     .withMessage('password is required')
     .isLength({ min: 8 })
     .withMessage('password must be at least 8 characters long'),
-  body('location').notEmpty().withMessage('location is required'),
   body('lastName').notEmpty().withMessage('last name is required'),
 ]);
 

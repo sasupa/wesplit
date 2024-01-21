@@ -1,21 +1,21 @@
 // GroupCard.js
-import React from "react";
-import { Card } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
+import React from 'react';
+import { Card } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 
 const GroupCard = ({ groupId, groupName, members }) => {
   const navigate = useNavigate();
   const handleCardClick = () => {
-    navigate(`/expenses/${groupId}`);
+    navigate(`${groupId}`);
   };
 
   return (
-    <Card className="my-3" onClick={handleCardClick}>
+    <Card className='my-3' onClick={handleCardClick}>
       <Card.Header>{groupName}</Card.Header>
       <Card.Body>
         {members.map((member, index) => (
-          <div className="mb-2" key={index}>
-            <strong>{member.userId.name}:</strong> Balance:{" "}
+          <div className='mb-2' key={index}>
+            <strong>{member.userId.name}:</strong> Balance:{' '}
             {parseFloat(member.balance)}€
           </div>
         ))}

@@ -1,18 +1,22 @@
+import axios from 'axios';
+
 // apiUtils.js
-const BASE_URL = "http://localhost:5100/wesplit/api/v1";
+const BASE_URL = 'http://localhost:5100/wesplit/api/v1';
 
 // Function to fetch groups
 // !!! TÄSSÄ KOVAKOODATTUNA VIELÄ ETTÄ HAKEE SASUN RYHMÄT, KOSKA EI VIELÄ LOG IN FUKTIOO JOSTA SAIS KÄYTTÄJÄN ID:N
 export const fetchGroups = async () => {
   try {
-    const response = await fetch(`${BASE_URL}/group/user/65aaf7caa582eea1a7947db8`);
+    const response = await fetch(
+      `${BASE_URL}/group/user/65aaf7caa582eea1a7947db8`
+    );
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     const data = await response.json();
-    return data;  // Return the list of groups
+    return data; // Return the list of groups
   } catch (error) {
-    console.error("Failed to fetch groups:", error);
+    console.error('Failed to fetch groups:', error);
     // You might want to handle the error differently depending on your app's needs
     throw error;
   }
@@ -25,9 +29,9 @@ export const fetchGroupWithGroupId = async (groupID) => {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     const data = await response.json();
-    return data;  // Return the list of groups
+    return data; // Return the list of groups
   } catch (error) {
-    console.error("Failed to fetch groups:", error);
+    console.error('Failed to fetch groups:', error);
     // You might want to handle the error differently depending on your app's needs
     throw error;
   }
@@ -41,9 +45,9 @@ export const fetchGroupTransactions = async (groupID) => {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     const data = await response.json();
-    return data;  // Return the list of groups
+    return data; // Return the list of groups
   } catch (error) {
-    console.error("Failed to fetch groups:", error);
+    console.error('Failed to fetch groups:', error);
     // You might want to handle the error differently depending on your app's needs
     throw error;
   }
@@ -57,9 +61,47 @@ export const testAPI = async () => {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     const data = await response.json();
-    return data;  // Return the list of groups
+    return data; // Return the list of groups
   } catch (error) {
-    console.error("Test failed", error);
+    console.error('Test failed', error);
+    // You might want to handle the error differently depending on your app's needs
+    throw error;
+  }
+};
+
+// Function to test API
+export const login = async (values) => {
+  try {
+    const response = await axios.post(`${BASE_URL}/auth/login`, values, {
+      withCredentials: true,
+    });
+
+    if (response.status >= 200 && response.status < 300) {
+      return response.data; // You might want to return specific data from the response
+    } else {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+  } catch (error) {
+    console.error('Something failed', error.message);
+    // You might want to handle the error differently depending on your app's needs
+    throw error;
+  }
+};
+
+export const register = async (values) => {
+  console.log(values);
+  try {
+    const response = await axios.post(`${BASE_URL}/auth/register`, values, {
+      withCredentials: true,
+    });
+
+    if (response.status >= 200 && response.status < 300) {
+      return response.data; // You might want to return specific data from the response
+    } else {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+  } catch (error) {
+    console.error('Something failed', error.message);
     // You might want to handle the error differently depending on your app's needs
     throw error;
   }

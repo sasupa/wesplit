@@ -4,24 +4,37 @@ import express from 'express';
 import morgan from 'morgan'; //logs requests and their status to console
 import mongoose from 'mongoose';
 import cors from 'cors'; // allow cross-origin requests
+import cookieParser from 'cookie-parser';
+
+const corsOptions = {
+  origin: 'http://localhost:3000',
+  credentials: true,
+};
 
 //inits
 const app = express();
-app.use(cors()); // allow cross-origin requests
+app.use(cors(corsOptions));
+//app.use(cors()); // allow cross-origin requests
 dotenv.config();
 
 // router file importing here
 import testRouter from './routes/testRouter.js';
 import groupRouter from './routes/groupRouter.js';
 import transactionRouter from './routes/transactionsRouter.js';
+import authRouter from './routes/authRouter.js';
+import userRouter from './routes/userRouter.js';
 
 //middleware
 import errorHandlerMiddleware from './middleware/errorHandlerMiddleware.js';
+import { authenticateUser } from './middleware/authMiddleware.js';
 
 //initing MORGAN to be used *only* in dev environment
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
+
+//Cookies init
+app.use(cookieParser());
 
 //MW for accepting JSON
 app.use(express.json());
@@ -34,7 +47,9 @@ app.get('/', (req, res) => {
 //app.use('/api/v1/jobs', jobRouter);
 app.use('/wesplit/api/v1/test', testRouter);
 app.use('/wesplit/api/v1/group', groupRouter);
-app.use('/wesplit/api/v1/transactions', transactionRouter);
+app.use('/wesplit/api/v1/transactions', authenticateUser, transactionRouter);
+app.use('/wesplit/api/v1/auth', authRouter);
+app.use('/wesplit/api/v1/users', authenticateUser, userRouter);
 
 // Not Found Middleware
 app.use('*', (req, res) => {
