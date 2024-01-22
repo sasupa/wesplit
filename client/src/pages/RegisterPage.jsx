@@ -34,7 +34,7 @@ const RegisterPage = () => {
       const data = await register(values);
       console.log(data);
       toast.success('Registration successful');
-      navigate('/'); // Redirect to login after successful registration
+      navigate('/groups'); // Redirect to login after successful registration
       resetForm();
       setSubmitting(false);
     } catch (error) {

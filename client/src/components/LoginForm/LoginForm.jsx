@@ -61,7 +61,8 @@ const LoginForm = ({ submission, initialValues, validationSchema }) => {
 
                   <div className='register-link text-center'>
                     <span>Not a member yet? </span>
-                    <Link to='/register'>Register</Link>
+                    <Link to='/register'>Register</Link><br></br>
+                    <Link to="/">Back home</Link>
                   </div>
                 </Form>
               </Formik>

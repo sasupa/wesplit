@@ -101,6 +101,8 @@ const RegisterForm = ({ submission, initialValues, validationSchema }) => {
                   <div className='register-link text-center'>
                     <span>Already a member? </span>
                     <Link to='/login'>Login</Link>
+                    <br></br>
+                    <Link to="/">Back home</Link>
                   </div>
                 </Form>
               </Formik>

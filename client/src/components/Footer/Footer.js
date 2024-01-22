@@ -13,14 +13,10 @@ const Footer = () => {
   const [darkModeIcon, setDarkModeIcon] = useState("fa fa-moon-o fa-2x");
   const [darkModeBg, setDarkModeBg] = useState("fixed-bottom light");
 
-  const handleLogout = () => {
-    logout()
-      .then((data) => {
-        console.log(data);
-      })
-      .catch((error) => {
-        console.error('Log out failed: ', error);
-      });
+  const handleLogout = async (values) => {
+    const data = await logout(values);
+    console.log(data);
+    navigate("/");
   };
 
   const handleDarkMode = () => {
@@ -63,9 +59,8 @@ const Footer = () => {
           ></i>
         </Col>
         <Col className="text-center py-2">
-          <Link onClick={handleLogout} to="/">
-            <i className="fa fa-sign-out fa-2x" aria-hidden="true"></i>
-          </Link>
+            <i className="fa fa-sign-out fa-2x" aria-hidden="true" onClick={handleLogout}></i>
+          
         </Col>
       </Row>
       <Row>
