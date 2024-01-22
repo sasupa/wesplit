@@ -1,18 +1,21 @@
 // ExpensePage.js
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { fetchGroups } from '../../utils/apiUtils';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 import Footer from '../../components/Footer/Footer';
 import LoadingSpinner from '../../components/LoadingSpinner/LoadingSpinner';
 import GroupCard from '../../components/GroupCard/GroupCard';
+import { Context } from "../../Context.js";
 
 const GroupsPage = () => {
+  const { contextValue, updateContextValue } = useContext(Context);
+  console.log(contextValue);
   const [groups, setGroups] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true); // Added loading state
 
   useEffect(() => {
-    fetchGroups()
+    fetchGroups(contextValue[1]._id)
       .then((data) => {
         setGroups(data.groups);
         setLoading(false); // Set loading to false when data is received
@@ -22,7 +25,7 @@ const GroupsPage = () => {
         setError(error.message);
         setLoading(false); // Set loading to false even when there's an error
       });
-  }, []);
+  }, [setGroups, setLoading]);
 
   return (
     <Container className='py-5'>

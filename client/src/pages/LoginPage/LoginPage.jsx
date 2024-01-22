@@ -1,19 +1,21 @@
-import React, { useEffect, useState } from 'react';
-import LoginForm from '../../components/LoginForm/LoginForm';
-import { useNavigate } from 'react-router-dom'; // Import useHistory
+import React, { useEffect, useState, useContext } from "react";
+import LoginForm from "../../components/LoginForm/LoginForm";
+import { useNavigate } from "react-router-dom"; // Import useHistory
 
-import { Formik, Form, Field, ErrorMessage } from 'formik';
-import * as Yup from 'yup';
-import { Link } from 'react-router-dom';
-import axios from 'axios';
-import { login } from '../../utils/apiUtils';
-import { toast } from 'react-toastify';
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
+import { Link } from "react-router-dom";
+import axios from "axios";
+import { login } from "../../utils/apiUtils";
+import { toast } from "react-toastify";
+import { Context } from "../../Context.js";
 
 const LoginPage = () => {
   //Inits
+  const { contextValue, updateContextValue } = useContext(Context);
   const navigate = useNavigate();
-  const [password, setPassword] = useState('');
-  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
   const initialValues = {
     password,
     email,
@@ -21,10 +23,10 @@ const LoginPage = () => {
 
   //Simple validation
   const validationSchema = Yup.object({
-    email: Yup.string().email('Invalid email address').required('Required'),
+    email: Yup.string().email("Invalid email address").required("Required"),
     password: Yup.string()
-      .required('No password provided.')
-      .min(8, 'Password is too short - should be 8 chars minimum.'),
+      .required("No password provided.")
+      .min(8, "Password is too short - should be 8 chars minimum."),
   });
 
   //Submit handler – axios example at the bottom
@@ -32,8 +34,15 @@ const LoginPage = () => {
     try {
       const data = await login(values);
       console.log(data);
-      toast.success('Login successful');
-      navigate('/groups');
+
+      // Tässä tuupataan kirjautunut käyttäjä Context APIin
+      let newState = [...contextValue];
+      newState[newState.length - 2] = data.user;
+      console.log(newState);
+      updateContextValue(newState);
+
+      toast.success("Login successful");
+      navigate("/groups");
       resetForm();
       setSubmitting(false);
     } catch (error) {

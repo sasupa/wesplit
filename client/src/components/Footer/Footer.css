@@ -1,0 +1,9 @@
+.dark {
+    padding-top: 1rem;
+    background-color: black;
+}
+
+.light {
+    padding-top: 1rem;
+    background-color: white;
+}

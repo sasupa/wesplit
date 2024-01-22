@@ -13,8 +13,7 @@ import { Link } from 'react-router-dom';
 
 const RegisterForm = ({ submission, initialValues, validationSchema }) => {
   return (
-    <div className='full-height-center'>
-      <Container className='fixed-height-container'>
+      <Container>
         <Row className='justify-content-md-center mt-5'>
           <Col xs={12} md={6}>
             <div className='form-container'>
@@ -109,7 +108,6 @@ const RegisterForm = ({ submission, initialValues, validationSchema }) => {
           </Col>
         </Row>
       </Container>
-    </div>
   );
 };
 

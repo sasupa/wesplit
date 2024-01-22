@@ -12,7 +12,6 @@ import { Link } from 'react-router-dom';
 
 const LoginForm = ({ submission, initialValues, validationSchema }) => {
   return (
-    <div className='full-height-center'>
       <Container className='fixed-height-container'>
         <Row className='justify-content-md-center mt-5'>
           <Col xs={12} md={6}>
@@ -70,7 +69,6 @@ const LoginForm = ({ submission, initialValues, validationSchema }) => {
           </Col>
         </Row>
       </Container>
-    </div>
   );
 };
 export default LoginForm;
