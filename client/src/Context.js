@@ -8,7 +8,7 @@ export const ContextProvider = ({ children }) => {
     // BASIC APP GLOBAL VARIABLES
     { name: "WeSplit", developer: "Jani&Sasu", year: "2024", darkMode: false },
     // USER PLACEHOLDER
-    {},
+    { name: "undefined"},
     // GROUP PLACEHOLDER
     {name: null, members:[], transactions: []},
   ]);
