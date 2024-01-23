@@ -6,9 +6,7 @@ const BASE_URL = 'http://localhost:5100/wesplit/api/v1';
 // Function to fetch groups with userId
 export const fetchGroups = async (id) => {
   try {
-    const response = await fetch(
-      `${BASE_URL}/group/user/${id}`
-    );
+    const response = await fetch(`${BASE_URL}/group/user/${id}`);
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
@@ -108,7 +106,9 @@ export const register = async (values) => {
 
 export const logout = async () => {
   try {
-    const response = await axios.get(`${BASE_URL}/auth/logout`);
+    const response = await axios.get(`${BASE_URL}/auth/logout`, {
+      withCredentials: true,
+    });
 
     if (response.status >= 200 && response.status < 300) {
       return response.data; // You might want to return specific data from the response

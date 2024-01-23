@@ -15,8 +15,7 @@ const GroupCard = ({ groupId, groupName, members }) => {
       <Card.Body>
         {members.map((member, index) => (
           <div className='mb-2' key={index}>
-            <strong>{member.userId.name}:</strong> Balance:{' '}
-            {parseFloat(member.balance)}€
+            <strong>KISSA:</strong> Balance: {parseFloat(member.balance)}€
           </div>
         ))}
       </Card.Body>
