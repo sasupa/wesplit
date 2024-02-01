@@ -24,7 +24,6 @@ const GroupPage = () => {
       .then((data) => {
         let newState = [...contextValue];
         newState[newState.length - 1] = data.group;
-        console.log(data.group);
         updateContextValue(newState);
       })
       .catch((error) => {

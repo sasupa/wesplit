@@ -1,11 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import LoginForm from "../../components/LoginForm/LoginForm";
-import { useNavigate } from "react-router-dom"; // Import useHistory
-
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
-import { Link } from "react-router-dom";
-import axios from "axios";
 import { login } from "../../utils/apiUtils";
 import { toast } from "react-toastify";
 import { Context } from "../../Context.js";

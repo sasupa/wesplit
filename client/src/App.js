@@ -1,29 +1,22 @@
-// import React from "react";
-// import { HashRouter as Router, Route, Routes } from "react-router-dom";
-
-import React from 'react';
-import { RouterProvider, createBrowserRouter } from 'react-router-dom';
-import LandingPage from './pages/LandingPage/LandingPage.js';
-import Error from './pages/ErrorPage.jsx';
-import Login from './pages/LoginPage/LoginPage.jsx';
-import GroupPageLayout from './pages/GroupPageLayout.jsx';
-import Register from './pages/RegisterPage.jsx';
-
-import { loader as groupsPageLoader } from './pages/GroupPageLayout.jsx';
-
-import GroupPage from './pages/GroupPage/GroupPage.js';
-import SettingsPage from './pages/SettingsPage/SettingsPage.js';
-import GroupsPage from './pages/GroupsPage/GroupsPage.js';
-import './App.css';
-import SignUpPage from './pages/SignUpPage/SignUpPage.jsx';
-import { ContextProvider } from './Context.js';
-import HomeLayout from './pages/HomeLayout.jsx';
-
-//Routes
+import React from "react";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import LandingPage from "./pages/LandingPage/LandingPage.js";
+import Error from "./pages/ErrorPage.jsx";
+import Login from "./pages/LoginPage/LoginPage.jsx";
+import GroupPageLayout from "./pages/GroupPageLayout.jsx";
+import UserPageLayout from "./pages/UserPageLayout.jsx";
+import Register from "./pages/RegisterPage.jsx";
+import GroupPage from "./pages/GroupPage/GroupPage.js";
+import SettingsPage from "./pages/SettingsPage/SettingsPage.js";
+import GroupsPage from "./pages/GroupsPage/GroupsPage.js";
+import HomeLayout from "./pages/HomeLayout.jsx";
+import { loader as groupsPageLoader } from "./pages/GroupPageLayout.jsx";
+import { loader as userPageLoader } from "./pages/UserPageLayout.jsx";
+import "./App.css";
 
 const router = createBrowserRouter([
   {
-    path: '/',
+    path: "/",
     element: <HomeLayout />,
     errorElement: <Error />,
     children: [
@@ -32,15 +25,26 @@ const router = createBrowserRouter([
         element: <LandingPage />,
       },
       {
-        path: 'login',
+        path: "login",
         element: <Login />,
       },
       {
-        path: 'register',
+        path: "register",
         element: <Register />,
       },
       {
-        path: 'groups',
+        path: "user",
+        element: <UserPageLayout />,
+        loader: userPageLoader,
+        children: [
+          {
+            path: "settings",
+            element: <SettingsPage />,
+          },
+        ],
+      },
+      {
+        path: "groups",
         element: <GroupPageLayout />,
         loader: groupsPageLoader,
         children: [
@@ -49,7 +53,7 @@ const router = createBrowserRouter([
             element: <GroupsPage />,
           },
           {
-            path: ':groupId',
+            path: ":groupId",
             element: <GroupPage />,
           },
         ],

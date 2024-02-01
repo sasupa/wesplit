@@ -46,7 +46,7 @@ const Footer = () => {
           </Link>
         </Col>
         <Col className="text-center py-2">
-          <Link to="/settings">
+          <Link to="/user/settings">
             <i className="fa fa-cog fa-2x" aria-hidden="true"></i>
           </Link>
         </Col>

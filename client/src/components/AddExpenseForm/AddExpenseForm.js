@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import { Form, Button } from "react-bootstrap";
-import './AddExpenseForm.css';
+import "./AddExpenseForm.css";
+import axios from "axios";
 
 const AddExpenseForm = (props) => {
   const [splitManually, setSplitManually] = useState(false);
+  const [yourShare, setYourShare] = useState(false);
   const [amount, setAmount] = useState(0.0);
-  const [member2Share, setYourShare] = useState(0.0);
+  const groupMembers = props.group.members;
+  console.log(groupMembers);
 
   const handleAmountChange = (event) => {
     setAmount(event.target.value);
@@ -18,27 +21,56 @@ const AddExpenseForm = (props) => {
 
   // Handle change in payment option
   const handlePaymentOptionChange = (event) => {
-    setSplitManually(event.target.value === "enterSplitManually");
+    setSplitManually(event.target.value === "manual division");
   };
 
   // Handle form submission
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const formData = new FormData(event.target);
+
+    const shares = [];
+
+    groupMembers.map((member, index) => {
+      shares.push({
+        shareholderId: member.userId._id,
+        share:
+          formData.get(member.userId._id.toString()) == ""
+            ? Math.floor(amount / groupMembers.length)
+            : formData.get(member.userId._id.toString()),
+      });
+    });
+
     const data = {
+      creator: groupMembers[0].userId._id,
       description: formData.get("description"),
       amount: parseFloat(formData.get("amount")),
-      paymentOption: formData.get("paymentOption"),
-      yourShare:
-        formData.get("yourShare") == null
-          ? parseFloat(formData.get("amount")) / 2
-          : parseFloat(formData.get("yourShare")),
-      member2Share:
-        formData.get("member2Share") == null
-          ? parseFloat(formData.get("amount")) / 2
-          : parseFloat(formData.get("member2Share")),
+      payer: formData.get("payer"),
+      divisionType: formData.get("divisionType"),
+      shares: shares,
     };
+
     console.log("Expense submitted:", data);
+
+    try {
+      const response = await axios.post(
+        `http://localhost:5100/wesplit/api/v1/transactions`,
+        data,
+        {
+          withCredentials: true,
+        }
+      );
+
+      if (response.status >= 200 && response.status < 300) {
+        return response.data; // You might want to return specific data from the response
+      } else {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+    } catch (error) {
+      console.error("Something failed", error.message);
+      // You might want to handle the error differently depending on your app's needs
+      throw error;
+    }
   };
 
   return (
@@ -69,54 +101,55 @@ const AddExpenseForm = (props) => {
       </Form.Group>
 
       <Form.Group>
-        <Form.Label htmlFor="paymentOption">Payment Option:</Form.Label>
+        <Form.Label htmlFor="payer">Payer</Form.Label>
         <Form.Control
           as="select"
-          id="paymentOption"
-          name="paymentOption"
+          id="payer"
+          name="payer"
           onChange={handlePaymentOptionChange}
         >
-          <option value="paidByYou">Paid by you and split equally</option>
-          <option value="paidByOther">
-            Paid by {props.group.member2} and split equally
-          </option>
-          <option value="enterSplitManually">Enter split manually</option>
+          {groupMembers.map((member, index) => (
+            <option key={index} value={member.userId._id}>
+              {member.userId.name}
+            </option>
+          ))}
         </Form.Control>
       </Form.Group>
 
-      {splitManually && (
-        <>
-          <Form.Group>
-            <Form.Label htmlFor="yourShare">Your Share (€):</Form.Label>
-            <Form.Control
-              type="number"
-              id="yourShare"
-              name="yourShare"
-              placeholder="0.00"
-              min="0"
-              max={amount}
-              step="0.01"
-              onChange={handleYourShareChange}
-            />
-          </Form.Group>
+      <Form.Group>
+        <Form.Label htmlFor="divisionType">Division</Form.Label>
+        <Form.Control
+          as="select"
+          id="divisionType"
+          name="divisionType"
+          onChange={handlePaymentOptionChange}
+        >
+          <option value="split equally">Split equally</option>
+          <option value="manual division">Enter split manually</option>
+        </Form.Control>
+      </Form.Group>
 
-          <Form.Group>
-            <Form.Label htmlFor="member2Share">
-              {props.group.member2} (€):
-            </Form.Label>
-            <Form.Control
-              type="number"
-              id="member2Share"
-              name="member2Share"
-              placeholder="0.00"
-              value={member2Share}
-              min="0"
-              step="0.01"
-              readOnly
-            />
-          </Form.Group>
-        </>
-      )}
+      {splitManually &&
+        groupMembers.map((member, index) => (
+          <>
+            <Form.Group key={index}>
+              <Form.Label htmlFor={member.userId._id}>
+                {member.userId.name}:
+              </Form.Label>
+              <Form.Control
+                type="number"
+                id={member.userId._id}
+                name={member.userId._id}
+                placeholder={Math.floor(amount / groupMembers.length)}
+                min="0"
+                max={amount}
+                step="0.01"
+                onChange={handleYourShareChange}
+              />
+            </Form.Group>
+          </>
+        ))}
+
       <Button variant="primary" type="submit" className="mt-4 mb-4">
         Submit
       </Button>

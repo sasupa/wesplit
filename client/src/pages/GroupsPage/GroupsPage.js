@@ -6,16 +6,19 @@ import Footer from '../../components/Footer/Footer';
 import LoadingSpinner from '../../components/LoadingSpinner/LoadingSpinner';
 import GroupCard from '../../components/GroupCard/GroupCard';
 import { Context } from "../../Context.js";
+import { useOutletContext } from 'react-router-dom';
 
 const GroupsPage = () => {
   const { contextValue, updateContextValue } = useContext(Context);
-  console.log(contextValue);
+  //console.log(contextValue);
   const [groups, setGroups] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true); // Added loading state
+  const user = useOutletContext();
+  console.log(user)
 
   useEffect(() => {
-    fetchGroups(contextValue[1]._id)
+    fetchGroups(user._id)
       .then((data) => {
         setGroups(data.groups);
         setLoading(false); // Set loading to false when data is received

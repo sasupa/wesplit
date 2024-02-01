@@ -2,18 +2,18 @@
 import React from 'react';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 import Footer from "../../components/Footer/Footer";
+import { useOutletContext } from 'react-router-dom';
 
 const SettingsPage = () => {
-  // Handle form submission
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    // Add your form submission logic here
-    console.log("Form submitted!");
-  };
+  const user = useOutletContext();
+  console.log(user)
 
   return (
     <Container className="py-5">
       <h1 className="text-center mb-4">Settings</h1>
+      <div>User: {user.name}</div>
+      <div>Email: {user.email}</div>
+      <div>Change password</div>
     <Footer />
     </Container>
   );
