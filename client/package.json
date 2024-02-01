@@ -28,7 +28,7 @@
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
   },
-  "homepage": "https://sasupa.github.io/wesplit",
+  "homepage": "https://sasupa.github.io/",
   "eslintConfig": {
     "extends": [
       "react-app",
