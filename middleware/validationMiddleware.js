@@ -60,26 +60,32 @@ export const validateRegisterInput = withValidationErrors([
 
 //NOTE: NEEDS SLIMING DOWN
 export const validateTransactionInput = withValidationErrors([
-  body('description').notEmpty().withMessage('description is required'),
+  body('description').notEmpty().withMessage('Description is required'),
   body('amount')
     .notEmpty()
-    .withMessage('password is required')
+    .withMessage('Amount is required')
     .isNumeric()
-    .withMessage('wrong format, please use numbers'),
-  body('divisionType')
-    .notEmpty()
-    .withMessage('division type is required is required'),
-  body('creator').notEmpty().withMessage('creator is required'),
-  body('payer').notEmpty().withMessage('creator is required'),
-  body('shares').custom((shares) => {
-    // Check if share.share exists and is of type Decimal128
-    if (share.share && share.share instanceof mongoose.Types.Decimal128) {
-      // Additional validation logic for Decimal128, if needed
-    } else {
-      // Throw an error with a custom message for this specific validation failure
-      throw new Error(
-        'Invalid format for share or share.share is not of type Decimal128'
-      );
+    .withMessage('Wrong format, please use numbers'),
+  body('divisionType').notEmpty().withMessage('Division type is required'),
+  body('creator').notEmpty().withMessage('Creator is required'),
+  body('payer').notEmpty().withMessage('Payer is required'),
+  body('shares').custom((shares, { req }) => {
+    const { divisionType } = req.body;
+
+    if (divisionType === 'split equally') {
+      // For 'split equally', shares field can be empty
+      return true;
+    }
+
+    // For other division types, both shareholderId and share should not be empty
+    if (!shares || !shares.length) {
+      throw new Error('Shares field is required');
+    }
+
+    for (const share of shares) {
+      if (!share.shareholderId || !share.share) {
+        throw new Error('Both shareholderId and share are required');
+      }
     }
 
     return true;
