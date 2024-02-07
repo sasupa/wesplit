@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import { Form, Button } from "react-bootstrap";
-import "./AddExpenseForm.css";
-import axios from "axios";
+import React, { useState } from 'react';
+import { Form, Button } from 'react-bootstrap';
+import './AddExpenseForm.css';
+import axios from 'axios';
 
 const AddExpenseForm = (props) => {
   const [splitManually, setSplitManually] = useState(false);
@@ -20,7 +20,7 @@ const AddExpenseForm = (props) => {
 
   // Handle change in payment option
   const handlePaymentOptionChange = (event) => {
-    setSplitManually(event.target.value === "manual division");
+    setSplitManually(event.target.value === 'manual division');
   };
 
   // Handle form submission
@@ -34,7 +34,7 @@ const AddExpenseForm = (props) => {
       shares.push({
         shareholderId: member.userId._id,
         share:
-          formData.get(member.userId._id.toString()) == ""
+          formData.get(member.userId._id.toString()) == ''
             ? Math.floor(amount / groupMembers.length)
             : formData.get(member.userId._id.toString()),
       });
@@ -50,7 +50,7 @@ const AddExpenseForm = (props) => {
       shares: shares,
     };
 
-    console.log("Expense submitted:", data);
+    console.log('Expense submitted:', data);
 
     try {
       const response = await axios.post(
@@ -67,7 +67,7 @@ const AddExpenseForm = (props) => {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
     } catch (error) {
-      console.error("Something failed", error.message);
+      console.error('Something failed', error.message);
       // You might want to handle the error differently depending on your app's needs
       throw error;
     }
@@ -76,36 +76,36 @@ const AddExpenseForm = (props) => {
   return (
     <Form onSubmit={handleSubmit}>
       <Form.Group>
-        <Form.Label htmlFor="description">Description:</Form.Label>
+        <Form.Label htmlFor='description'>Description:</Form.Label>
         <Form.Control
-          type="text"
-          id="description"
-          name="description"
-          placeholder="Enter a description"
+          type='text'
+          id='description'
+          name='description'
+          placeholder='Enter a description'
           required
         />
       </Form.Group>
 
       <Form.Group>
-        <Form.Label htmlFor="amount">Amount (€):</Form.Label>
+        <Form.Label htmlFor='amount'>Amount (€):</Form.Label>
         <Form.Control
-          type="number"
-          id="amount"
-          name="amount"
-          placeholder="0.00"
-          min="0"
-          step="0.01"
+          type='number'
+          id='amount'
+          name='amount'
+          placeholder='0.00'
+          min='0'
+          step='0.01'
           required
           onChange={handleAmountChange}
         />
       </Form.Group>
 
       <Form.Group>
-        <Form.Label htmlFor="payer">Payer</Form.Label>
+        <Form.Label htmlFor='payer'>Payer</Form.Label>
         <Form.Control
-          as="select"
-          id="payer"
-          name="payer"
+          as='select'
+          id='payer'
+          name='payer'
           onChange={handlePaymentOptionChange}
         >
           {groupMembers.map((member, index) => (
@@ -117,15 +117,15 @@ const AddExpenseForm = (props) => {
       </Form.Group>
 
       <Form.Group>
-        <Form.Label htmlFor="divisionType">Division</Form.Label>
+        <Form.Label htmlFor='divisionType'>Division</Form.Label>
         <Form.Control
-          as="select"
-          id="divisionType"
-          name="divisionType"
+          as='select'
+          id='divisionType'
+          name='divisionType'
           onChange={handlePaymentOptionChange}
         >
-          <option value="split equally">Split equally</option>
-          <option value="manual division">Enter split manually</option>
+          <option value='split equally'>Split equally</option>
+          <option value='manual division'>Enter split manually</option>
         </Form.Control>
       </Form.Group>
 
@@ -137,20 +137,20 @@ const AddExpenseForm = (props) => {
                 {member.userId.name}:
               </Form.Label>
               <Form.Control
-                type="number"
+                type='number'
                 id={member.userId._id}
                 name={member.userId._id}
                 placeholder={Math.floor(amount / groupMembers.length)}
-                min="0"
+                min='0'
                 max={amount}
-                step="0.01"
+                step='0.01'
                 onChange={handleYourShareChange}
               />
             </Form.Group>
           </>
         ))}
 
-      <Button variant="primary" type="submit" className="mt-4 mb-4">
+      <Button variant='primary' type='submit' className='mt-4 mb-4'>
         Submit
       </Button>
     </Form>
