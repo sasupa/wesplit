@@ -18,7 +18,9 @@ export const createTransaction = async (req, res) => {
   try {
     // Use object destructuring to directly pass the properties of data
     const newTransaction = await Transaction.create({ ...data });
+    console.log(newTransaction);
     res.status(StatusCodes.OK).json({ newTransaction });
+
   } catch (error) {
     // Handle errors, perhaps send an error response
     console.error(error);

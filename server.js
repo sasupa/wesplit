@@ -44,7 +44,6 @@ app.get('/', (req, res) => {
 });
 
 //ROUTES
-//app.use('/api/v1/jobs', jobRouter);
 app.use('/wesplit/api/v1/test', testRouter);
 app.use('/wesplit/api/v1/group', groupRouter);
 app.use('/wesplit/api/v1/transactions', authenticateUser, transactionRouter);
@@ -61,15 +60,41 @@ app.use(errorHandlerMiddleware);
 
 //port fetch from env
 const port = process.env.PORT || 5500;
+// Flag to indicate MongoDB connection status
+let mongoDBConnected = false;
 
-// Server runs only when Mongo Connection okay
+app.listen(port, () => {
+  console.log(`Server running on PORT ${port}....`);
+  // Attempt to connect to MongoDB
+  mongoose.connect(process.env.MONGO_URL)
+    .then(() => {
+      mongoDBConnected = true;
+      console.log('MongoDB connected!');
+    })
+    .catch((error) => {
+      console.error('Failed to connect to MongoDB:', error);
+      // MongoDB connection error does not prevent the server from starting
+    });
+});
+
+// Middleware to check MongoDB connection
+app.use((req, res, next) => {
+  if (!mongoDBConnected) {
+    return res.status(503).send('Service Unavailable: MongoDB is down');
+  }
+  next();
+});
+
+/* 
+
 try {
   await mongoose.connect(process.env.MONGO_URL);
   app.listen(port, () => {
-    console.log(`server running on PORT ${port}....`);
-    //console.log(process.env.MONGO_URL);
+  console.log(`server running on PORT ${port}....`);
   });
 } catch (error) {
   console.log(error);
   process.exit(1);
 }
+
+*/

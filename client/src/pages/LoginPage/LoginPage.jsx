@@ -12,6 +12,7 @@ const LoginPage = () => {
   const navigate = useNavigate();
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
+  const [loader, setLoader] = useState(false);
   const initialValues = {
     password,
     email,
@@ -27,21 +28,22 @@ const LoginPage = () => {
 
   //Submit handler – axios example at the bottom
   const onSubmit = async (values, { setSubmitting, resetForm }) => {
+    setLoader(true);
     try {
       const data = await login(values);
       console.log(data);
-
       // Tässä tuupataan kirjautunut käyttäjä Context APIin
       let newState = [...contextValue];
       newState[newState.length - 2] = data.user;
       console.log(newState);
       updateContextValue(newState);
-
       toast.success("Login successful");
       navigate("/groups");
       resetForm();
       setSubmitting(false);
+
     } catch (error) {
+      setLoader(false);
       toast.error(error?.response?.data?.msg);
       resetForm();
       return error;
@@ -50,6 +52,7 @@ const LoginPage = () => {
 
   return (
     <LoginForm
+      loaderStatus={loader}
       submission={onSubmit}
       initialValues={initialValues}
       validationSchema={validationSchema}
