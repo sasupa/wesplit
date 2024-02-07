@@ -31,6 +31,7 @@ const GroupPage = () => {
         setError(error.message);
       });
   }, []);
+  console.log(contextValue);
 
   return (
     <Container className="py-5">
@@ -53,15 +54,15 @@ const GroupPage = () => {
 
       {/* Add Expense */}
       <Row className="justify-content-center mb-3">
-        <Col md={6} className="form-bg p-4 m-3">
+        <Col xs={10} md={8} className="form-bg p-4 m-3">
           <h2>Add an expense</h2>
           <AddExpenseForm group={contextValue[2]} />
         </Col>
       </Row>
 
       {/* Transactions List */}
-      <Row className="justify-content-center mb-5">
-        <Col md={6}>
+      <Row className="justify-content-center transaction-margin">
+        <Col xs={10} md={8}>
           <h2>Latest transactions in {contextValue[2].name}</h2>
           <br></br>
           {contextValue[2].transactions.map((transaction, index) => (

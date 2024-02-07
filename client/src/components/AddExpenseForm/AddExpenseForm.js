@@ -8,7 +8,6 @@ const AddExpenseForm = (props) => {
   const [yourShare, setYourShare] = useState(false);
   const [amount, setAmount] = useState(0.0);
   const groupMembers = props.group.members;
-  console.log(groupMembers);
 
   const handleAmountChange = (event) => {
     setAmount(event.target.value);
@@ -43,6 +42,7 @@ const AddExpenseForm = (props) => {
 
     const data = {
       creator: groupMembers[0].userId._id,
+      group: props.group._id,
       description: formData.get("description"),
       amount: parseFloat(formData.get("amount")),
       payer: formData.get("payer"),

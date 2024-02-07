@@ -10,12 +10,10 @@ import { useOutletContext } from 'react-router-dom';
 
 const GroupsPage = () => {
   const { contextValue, updateContextValue } = useContext(Context);
-  //console.log(contextValue);
   const [groups, setGroups] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true); // Added loading state
   const user = useOutletContext();
-  console.log(user)
 
   useEffect(() => {
     fetchGroups(user._id)
