@@ -70,7 +70,7 @@ export const validateTransactionInput = withValidationErrors([
   body('creator').notEmpty().withMessage('Creator is required'),
   body('payer').notEmpty().withMessage('Payer is required'),
   body('shares').custom((shares, { req }) => {
-    const { divisionType } = req.body;
+    const { divisionType, amount } = req.body;
 
     if (divisionType === 'split equally') {
       // For 'split equally', shares field can be empty
@@ -86,6 +86,20 @@ export const validateTransactionInput = withValidationErrors([
       if (!share.shareholderId || !share.share) {
         throw new Error('Both shareholderId and share are required');
       }
+    }
+
+    // shares.share match amount
+    let totalShares = 0;
+    shares.forEach((shareObj, index) => {
+      const shareValue = shareObj.share;
+      totalShares = totalShares + shareValue;
+    });
+
+    //Checking: total, or small deviation
+    if (totalShares > amount - 0.05 && totalShares < amount + 0.05) {
+      return true;
+    } else {
+      throw new Error('Sums do not add up.');
     }
 
     return true;

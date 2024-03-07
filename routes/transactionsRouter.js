@@ -10,7 +10,7 @@ import { validateTransactionInput } from '../middleware/validationMiddleware.js'
 router
   .route('/')
   .get(transactionsPopulateMiddleware, getTransactions)
-  .post(createTransaction);
-  //.post(validateTransactionInput, createTransaction);
+  .post(validateTransactionInput, createTransaction);
+//.post(validateTransactionInput, createTransaction);
 
 export default router;
