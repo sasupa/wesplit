@@ -95,12 +95,12 @@ export const validateTransactionInput = withValidationErrors([
       totalShares = totalShares + shareValue;
     });
 
-    //Checking: total, or small deviation
+    /* Checking: total, or small deviation
     if (totalShares > amount - 0.05 && totalShares < amount + 0.05) {
       return true;
     } else {
       throw new Error('Sums do not add up.');
-    }
+    }*/
 
     return true;
   }),

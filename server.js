@@ -84,17 +84,3 @@ app.use((req, res, next) => {
   }
   next();
 });
-
-/* 
-
-try {
-  await mongoose.connect(process.env.MONGO_URL);
-  app.listen(port, () => {
-  console.log(`server running on PORT ${port}....`);
-  });
-} catch (error) {
-  console.log(error);
-  process.exit(1);
-}
-
-*/

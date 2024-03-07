@@ -11,7 +11,6 @@ export const loader = async () => {
         withCredentials: true, // Include cookies in the request
       }
     );
-    console.log(data);
     return data;
   } catch (error) {
     // back to landing page if not logged in.

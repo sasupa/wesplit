@@ -31,7 +31,6 @@ const GroupPage = () => {
         setError(error.message);
       });
   }, []);
-  console.log(contextValue);
 
   return (
     <Container className="py-5">

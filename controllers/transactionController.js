@@ -1,5 +1,6 @@
-import { StatusCodes } from 'http-status-codes';
-import Transaction from '../models/transactionModel.js';
+import { StatusCodes } from "http-status-codes";
+import Transaction from "../models/transactionModel.js";
+import Group from "../models/groupModel.js";
 
 //GET ALL TRANSACTIONS
 export const getTransactions = async (req, res) => {
@@ -7,27 +8,44 @@ export const getTransactions = async (req, res) => {
   res.status(StatusCodes.OK).json(transactions);
 };
 
-//CREATE NEW TRANSACTION
+//CREATE NEW TRANSACTION & UPDATE GROUP BALANCES
 export const createTransaction = async (req, res) => {
-  //Validation middleware missing still. Create that.
+  // Destructure
   const data = req.body;
-  console.log(data);
 
-  //We can eliminate try catch after we have validation!
+  // Use object destructuring to directly pass the properties of data
+  const newTransaction = await Transaction.create({ ...data });
+  console.log(newTransaction);
 
-  try {
-    // Use object destructuring to directly pass the properties of data
-    const newTransaction = await Transaction.create({ ...data });
-    console.log(newTransaction);
-    res.status(StatusCodes.OK).json({ newTransaction });
+  // Fetch the group and its current balances
+  const group = await Group.findById(data.group);
 
-  } catch (error) {
-    // Handle errors, perhaps send an error response
-    console.error(error);
-    res
-      .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .json({ msg: 'error', error: 'Internal Server Error' });
-  }
+  // Update balances based on shares
+  data.shares.forEach((share, index) => {
+    const memberIndex = group.members.findIndex(
+      (member) => member.userId.toString() === share.shareholderId
+    );
+
+    if (memberIndex !== -1) {
+      // Check if user is they payer >> balance calc
+      let paidAmount = parseFloat(0);
+      if (share.shareholderId === data.payer) {
+        paidAmount = parseFloat(data.amount);
+      }
+
+      // Update balance for each member
+      group.members[memberIndex].balance =
+        parseFloat(group.members[memberIndex].balance) +
+        (paidAmount - parseFloat(share.share));
+    }
+  });
+
+  // Save the updated group
+  const updatedGroup = await group.save();
+  console.log(updatedGroup); // For debugging
+
+  // let frontend know we've succeeded 👍
+  res.status(StatusCodes.OK).json({ newTransaction });
 };
 
 //DELETE TRANSACTION
@@ -38,5 +56,5 @@ export const deleteTransactions = async (req, res) => {
 
   res
     .status(StatusCodes.OK)
-    .json({ msg: 'transaction deleted', transaction: removedTransactions });
+    .json({ msg: "transaction deleted", transaction: removedTransactions });
 };

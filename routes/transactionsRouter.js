@@ -11,6 +11,5 @@ router
   .route('/')
   .get(transactionsPopulateMiddleware, getTransactions)
   .post(validateTransactionInput, createTransaction);
-//.post(validateTransactionInput, createTransaction);
 
 export default router;

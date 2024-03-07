@@ -1,15 +1,13 @@
 // ExpensePage.js
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState } from 'react';
 import { fetchGroups } from '../../utils/apiUtils';
-import { Container, Row, Col, Form, Button } from 'react-bootstrap';
+import { Container } from 'react-bootstrap';
 import Footer from '../../components/Footer/Footer';
 import LoadingSpinner from '../../components/LoadingSpinner/LoadingSpinner';
 import GroupCard from '../../components/GroupCard/GroupCard';
-import { Context } from "../../Context.js";
 import { useOutletContext } from 'react-router-dom';
 
 const GroupsPage = () => {
-  const { contextValue, updateContextValue } = useContext(Context);
   const [groups, setGroups] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true); // Added loading state
