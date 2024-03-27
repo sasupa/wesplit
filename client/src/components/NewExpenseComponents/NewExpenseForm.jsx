@@ -1,43 +1,63 @@
 import React from 'react';
-import { useFormik } from 'formik';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
+import {
+  Container,
+  Row,
+  Col,
+  Form as BootstrapForm,
+  Button,
+} from 'react-bootstrap';
+import * as Yup from 'yup';
 
-const NewExpenseForm = ({ initialValues, handleSubmit }) => {
-  const formik = useFormik({
-    initialValues,
-    onSubmit: handleSubmit, // Call onSubmit function passed from parent with form values
-  });
-
+const NewExpenseForm = ({ initialValues, handleSubmit, validationSchema }) => {
   return (
-    <form onSubmit={formik.handleSubmit}>
-      <label htmlFor='firstName'>First Name</label>
-      <input
-        id='firstName'
-        name='firstName'
-        type='text'
-        onChange={formik.handleChange}
-        value={formik.values.firstName}
-      />
+    <Container>
+      <Row className='justify-content-md-center mt-5'>
+        <Col xs={12} md={8}>
+          <Formik
+            initialValues={initialValues}
+            onSubmit={handleSubmit}
+            validationSchema={validationSchema}
+          >
+            <Form>
+              <BootstrapForm.Group controlId='firstName'>
+                <BootstrapForm.Label>First Name</BootstrapForm.Label>
+                <Field type='text' name='firstName' className='form-control' />
+                <ErrorMessage
+                  name='firstName'
+                  component='div'
+                  className='text-danger'
+                />
+              </BootstrapForm.Group>
 
-      <label htmlFor='lastName'>Last Name</label>
-      <input
-        id='lastName'
-        name='lastName'
-        type='text'
-        onChange={formik.handleChange}
-        value={formik.values.lastName}
-      />
+              <BootstrapForm.Group controlId='lastName'>
+                <BootstrapForm.Label>Last Name</BootstrapForm.Label>
+                <Field type='text' name='lastName' className='form-control' />
+                <ErrorMessage
+                  name='lastName'
+                  component='div'
+                  className='text-danger'
+                />
+              </BootstrapForm.Group>
 
-      <label htmlFor='email'>Email Address</label>
-      <input
-        id='email'
-        name='email'
-        type='email'
-        onChange={formik.handleChange}
-        value={formik.values.email}
-      />
+              <BootstrapForm.Group controlId='email'>
+                <BootstrapForm.Label>Email Address</BootstrapForm.Label>
+                <Field type='email' name='email' className='form-control' />
+                <ErrorMessage
+                  name='email'
+                  component='div'
+                  className='text-danger'
+                />
+              </BootstrapForm.Group>
 
-      <button type='submit'>Submit</button>
-    </form>
+              <Button type='submit' variant='primary'>
+                Submit
+              </Button>
+            </Form>
+          </Formik>
+        </Col>
+      </Row>
+    </Container>
   );
 };
 

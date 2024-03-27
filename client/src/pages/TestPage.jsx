@@ -5,6 +5,7 @@ import Modal from 'react-bootstrap/Modal';
 import NewExpenseForm from '../components/NewExpenseComponents/NewExpenseForm';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import * as Yup from 'yup';
 
 const TestPage = () => {
   const [show, setShow] = useState(false);
@@ -19,7 +20,7 @@ const TestPage = () => {
       toast.success('Expense added ✅ ');
       resetForm();
       handleClose();
-      navigate('/groups');
+      navigate('/groups'); // add navigation to the same group when merging
     } catch (err) {
       console.log(err);
     }
@@ -30,6 +31,14 @@ const TestPage = () => {
     lastName: '',
     email: '',
   };
+
+  const validationSchema = Yup.object({
+    // firstName: Yup.string().min(1, 'Invalid name').required('Required'),
+    // email: Yup.string().email('Invalid email address').required('Required'),
+    // password: Yup.string()
+    //   .required('No password provided.')
+    //   .min(8, 'Password is too short - should be 8 chars minimum.'),
+  });
 
   return (
     <>
@@ -45,6 +54,7 @@ const TestPage = () => {
           <NewExpenseForm
             initialValues={initialValues}
             handleSubmit={handleSubmit}
+            validationSchema={validationSchema}
           />
         </Modal.Body>
       </Modal>
