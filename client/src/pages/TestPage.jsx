@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
-
-import Modal from 'react-bootstrap/Modal';
-import NewExpenseForm from '../components/NewExpenseComponents/NewExpenseForm';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
+
+import Modal from 'react-bootstrap/Modal';
+import NewExpenseForm from '../components/NewExpenseComponents/NewExpenseForm';
+//TEST
+import AddExpenseForm from '../components/AddExpenseForm/AddExpenseForm';
 
 const TestPage = () => {
   const [show, setShow] = useState(false);
@@ -27,9 +29,16 @@ const TestPage = () => {
   };
 
   const initialValues = {
-    firstName: '',
-    lastName: '',
-    email: '',
+    //firstName: '',
+    //lastName: '',
+    //email: '',
+    creator: '',
+    group: '', //can we add it here?
+    description: '',
+    amount: '',
+    payer: '',
+    divisionType: 'split equally',
+    shares: '',
   };
 
   const validationSchema = Yup.object({
