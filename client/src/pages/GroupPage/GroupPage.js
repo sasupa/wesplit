@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import {
   fetchGroupWithGroupId,
   fetchGroupTransactions,
@@ -8,16 +8,21 @@ import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import Footer from "../../components/Footer/Footer.js";
 import UserCard from "../../components/UserCard/UserCard.js";
 import AddUserCard from "../../components/AddUserCard/AddUserCard.js";
-import AddExpenseForm from "../../components/AddExpenseForm/AddExpenseForm.js";
 import Transaction from "../../components/Transaction/Transaction.js";
 import "font-awesome/css/font-awesome.min.css";
 import "./GroupPage.css";
 import { Context } from "../../Context.js";
+import ExpenseModal from "../../components/NewExpenseComponents/ExpenseModal.jsx";
 
 const GroupPage = () => {
   const { contextValue, updateContextValue } = useContext(Context);
   const [error, setError] = useState(null);
+  const [show, setShow] = useState(false);
   const { groupId } = useParams(); // Get the groupId from URL
+
+  const handleShow = () => setShow(true);
+  const handleClose = () => setShow(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchGroupWithGroupId(groupId)
@@ -52,15 +57,15 @@ const GroupPage = () => {
       </Row>
 
       {/* Add Expense */}
-      <Row className="justify-content-center mb-3">
-        <Col xs={10} md={8} className="form-bg p-4 m-3">
-          <h2>Add an expense</h2>
-          <AddExpenseForm group={contextValue[2]} />
-        </Col>
+      <Row className="justify-content-center transaction-margin">
+        <Button variant="primary" onClick={handleShow}>
+          Add new expense
+        </Button>
+        <ExpenseModal show={show} handleClose={handleClose} navigate={navigate} group={contextValue[2]}/>
       </Row>
 
       {/* Transactions List */}
-      <Row className="justify-content-center transaction-margin">
+      <Row className="justify-content-center">
         <Col xs={10} md={8}>
           <h2>Latest transactions in {contextValue[2].name}</h2>
           <br></br>
