@@ -1,80 +1,61 @@
 import React, { useState } from 'react';
 import { Formik, Form, Field } from 'formik';
 
-import '../components/LoginForm/LoginForm.css';
-
 const MyForm = () => {
-  // 3 Local states to keep track of the numbers
-  const [totalAmount, setTotalAmount] = useState(0); //user set
-  const [remainingAmount, setRemainingAmount] = useState(0); //calculated
-  const [participantAmount, setParticipantAmount] = useState(0); //user set. Tästä dynaaminen array
+  // Local states to keep track of the numbers
+  const [totalAmount, setTotalAmount] = useState(0); // User set
+  const [remainingAmount, setRemainingAmount] = useState(0); // Calculated
+  const [participantAmounts, setParticipantAmounts] = useState([]); // User set
 
-  //********* TOTAL AMOUNT *******//
+  // Total Amount change handler
   const handleTotalAmountChange = (e, setFieldValue) => {
     const newValue = parseFloat(e.target.value);
 
-    //Handling total amount
+    // Update total amount and remaining amount
     setTotalAmount(newValue);
-    setRemainingAmount(newValue);
-    setFieldValue('totalAmount', newValue);
 
-    //Resetting participant value when total changes for UX reasons
-    setParticipantAmount(0);
-    setFieldValue('participantAmount', 0);
-  };
+    //calculates the remaining sum. Reduce() subtracts all sums from an array
+    const newRemainingAmount =
+      newValue - participantAmounts.reduce((acc, curr) => acc + curr, 0);
 
-  //********* USER AMOUNTS *******//
-  const handleParticipantChange = (e, setFieldValue) => {
-    // Declaring *all* required variables
-    const participantAmount = parseFloat(e.target.value);
-    const newRemainingAmount = totalAmount - participantAmount;
-
-    // Updating states and userfields
     setRemainingAmount(newRemainingAmount);
-    setParticipantAmount(participantAmount);
+    setFieldValue('totalAmount', newValue);
     setFieldValue('amountLeft', newRemainingAmount);
-    setFieldValue('participantAmount', participantAmount);
-
-    //LATER: DYNAMIC UPDATING BASED ON THE FIELD ID (i.e. right field & remaining amounts are updated)
-
-    const elementID = e.target.id; //Getting the id of the field that was changed
-    const newValue = e.target.value; //Getting the changed value for state and fieldset
-
-    // --> setFieldValue(elementID, newValue)
-    // --> setParticipantAmount (iteroituvasti)
   };
 
-  //Dummy members for dynamic rendering and naming – LATER
+  // Participant amount change handler
+  const handleParticipantChange = (e, index, setFieldValue) => {
+    const newParticipantAmounts = [...participantAmounts];
+    const newValue = parseFloat(e.target.value);
+    newParticipantAmounts[index] = newValue || 0; // If the value is empty, treat it as 0
+
+    const newRemainingAmount =
+      totalAmount - newParticipantAmounts.reduce((acc, curr) => acc + curr, 0);
+
+    setRemainingAmount(newRemainingAmount);
+    setParticipantAmounts(newParticipantAmounts);
+    console.log(participantAmounts);
+    setFieldValue(
+      `participants[${index}].amount`,
+      newParticipantAmounts[index]
+    );
+    setFieldValue('amountLeft', newRemainingAmount);
+  };
+
+  // Dummy members for dynamic rendering and naming – LATER
   const members = [
-    {
-      name: 'kissa',
-      share: '',
-    },
-    {
-      name: 'kassa',
-      share: '',
-    },
+    { name: 'Member 1' },
+    { name: 'Member 2' },
+    // Add more members here dynamically if needed
   ];
-
-  // **** DYNAMIC RENDERING TEMPLATE FOR LATER –– WORKS *****
-
-  // const dynamicUserInputFields = members.map((member, index) => (
-  //   <div>
-  //     <label htmlFor='participantAmount'>Participant Amount:</label>
-  //     <Field
-  //       type='number'
-  //       id={`participantAmount+${member.name}`}
-  //       name='participantAmount'
-  //       value={participantAmount === 0 ? '' : participantAmount}
-  //       placeholder='0'
-  //       onChange={(e) => handleParticipantChange(e, setFieldValue)}
-  //     />
-  //   </div>
-  // ));
 
   return (
     <Formik
-      initialValues={{ totalAmount: 0, amountLeft: 0, participantAmount: 0 }}
+      initialValues={{
+        totalAmount: '',
+        amountLeft: '',
+        participants: Array(members.length).fill({ amount: 0 }),
+      }}
       onSubmit={(values) => {
         console.log(values);
       }}
@@ -94,22 +75,24 @@ const MyForm = () => {
             />
           </div>
 
-          {/* Other fields for participants */}
-
-          {/* DYNAMIC TEMPLATE FOR LATER  | MAPPING DONE ABOVE */}
-          {/* <div>{dynamicUserInputFields}</div> */}
-
-          <div>
-            <label htmlFor='participantAmount'>Participant Amount:</label>
-            <Field
-              type='number'
-              id={`participantAmount`}
-              name='participantAmount'
-              value={participantAmount === 0 ? '' : participantAmount}
-              placeholder='0'
-              onChange={(e) => handleParticipantChange(e, setFieldValue)}
-            />
-          </div>
+          {/* Dynamic rendering of participant fields */}
+          {members.map((member, index) => (
+            <div key={index}>
+              <label htmlFor={`participants.${index}.amount`}>
+                {member.name} Amount:
+              </label>
+              <Field
+                type='number'
+                id={`participants.${index}.amount`}
+                name={`participants.${index}.amount`}
+                value={participantAmounts[index] || ''}
+                placeholder='0'
+                onChange={(e) =>
+                  handleParticipantChange(e, index, setFieldValue)
+                }
+              />
+            </div>
+          ))}
 
           <div>
             <label htmlFor='amountLeft'>Amount Left:</label>
@@ -122,7 +105,7 @@ const MyForm = () => {
             />
           </div>
 
-          <button type='submit' disabled={remainingAmount !== 0 ? true : false}>
+          <button type='submit' disabled={remainingAmount !== 0}>
             Submit
           </button>
         </Form>
