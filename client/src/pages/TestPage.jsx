@@ -5,7 +5,7 @@ const MyForm = () => {
   // Local states to keep track of the numbers
   const [totalAmount, setTotalAmount] = useState(0); // User set
   const [remainingAmount, setRemainingAmount] = useState(0); // Calculated
-  const [participantAmounts, setParticipantAmounts] = useState([]); // User set
+  const [participantAmounts, setParticipantAmounts] = useState([]); // User set, containing IDs and amounts
 
   // Total Amount change handler
   const handleTotalAmountChange = (e, setFieldValue) => {
@@ -14,9 +14,9 @@ const MyForm = () => {
     // Update total amount and remaining amount
     setTotalAmount(newValue);
 
-    //calculates the remaining sum. Reduce() subtracts all sums from an array
+    // Calculates the remaining sum. Reduce() subtracts all sums from an array
     const newRemainingAmount =
-      newValue - participantAmounts.reduce((acc, curr) => acc + curr, 0);
+      newValue - participantAmounts.reduce((acc, curr) => acc + curr.amount, 0);
 
     setRemainingAmount(newRemainingAmount);
     setFieldValue('totalAmount', newValue);
@@ -27,37 +27,59 @@ const MyForm = () => {
   const handleParticipantChange = (e, index, setFieldValue) => {
     const newParticipantAmounts = [...participantAmounts];
     const newValue = parseFloat(e.target.value);
-    newParticipantAmounts[index] = newValue || 0; // If the value is empty, treat it as 0
 
+    // Update participant amount
+    newParticipantAmounts[index].amount = newValue || 0; // If the value is empty, treat it as 0
+
+    // Recalculate remaining amount
     const newRemainingAmount =
-      totalAmount - newParticipantAmounts.reduce((acc, curr) => acc + curr, 0);
+      totalAmount -
+      newParticipantAmounts.reduce((acc, curr) => acc + curr.amount, 0);
 
     setRemainingAmount(newRemainingAmount);
     setParticipantAmounts(newParticipantAmounts);
-    console.log(participantAmounts);
     setFieldValue(
-      `participants[${index}].amount`,
-      newParticipantAmounts[index]
+      `participants.${index}.amount`,
+      newParticipantAmounts[index].amount
     );
     setFieldValue('amountLeft', newRemainingAmount);
   };
 
   // Dummy members for dynamic rendering and naming – LATER
   const members = [
-    { name: 'Member 1' },
-    { name: 'Member 2' },
+    { id: 1, name: 'Member 1' },
+    { id: 2, name: 'Member 2' },
+    { id: 3, name: 'Member 3' },
     // Add more members here dynamically if needed
   ];
+
+  // Initialize participant amounts with IDs and zero amounts
+  useState(() => {
+    setParticipantAmounts(
+      members.map((member) => ({ id: member.id, amount: 0 }))
+    );
+  }, []);
 
   return (
     <Formik
       initialValues={{
         totalAmount: '',
         amountLeft: '',
-        participants: Array(members.length).fill({ amount: 0 }),
+        participants: participantAmounts,
       }}
-      onSubmit={(values) => {
+      onSubmit={(values, { resetForm }) => {
         console.log(values);
+        // Perform any submission logic here
+        // Then reset the form
+        setTotalAmount(0);
+        setRemainingAmount(0);
+        setParticipantAmounts(
+          participantAmounts.map((participant) => ({
+            id: participant.id,
+            amount: 0,
+          }))
+        );
+        resetForm();
       }}
     >
       {({ values, setFieldValue }) => (
@@ -85,11 +107,26 @@ const MyForm = () => {
                 type='number'
                 id={`participants.${index}.amount`}
                 name={`participants.${index}.amount`}
-                value={participantAmounts[index] || ''}
+                value={participantAmounts[index].amount || ''}
                 placeholder='0'
                 onChange={(e) =>
                   handleParticipantChange(e, index, setFieldValue)
                 }
+                inputMode='numeric'
+                pattern='[0-9]*'
+                onKeyPress={(e) => {
+                  // Allow only numeric input, backspace, and arrow keys
+                  const allowedKeys = [
+                    'Backspace',
+                    'ArrowLeft',
+                    'ArrowRight',
+                    'ArrowUp',
+                    'ArrowDown',
+                  ];
+                  if (!/\d/.test(e.key) && !allowedKeys.includes(e.key)) {
+                    e.preventDefault();
+                  }
+                }}
               />
             </div>
           ))}
