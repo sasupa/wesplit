@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Formik, Form, Field } from 'formik';
+import '../components/NewExpenseComponents/MyForm.css'; // Import the CSS file
 
 const MyForm = () => {
   // Local states to keep track of the numbers
@@ -83,9 +84,17 @@ const MyForm = () => {
       }}
     >
       {({ values, setFieldValue }) => (
-        <Form>
-          <div>
-            <label htmlFor='totalAmount'>Total Amount:</label>
+        <Form className='form-container'>
+          {' '}
+          {/* Apply container class */}
+          <div className='field-container'>
+            {' '}
+            {/* Apply container class */}
+            <label htmlFor='totalAmount' className='label'>
+              {' '}
+              {/* Apply label class */}
+              Total Amount:
+            </label>
             <Field
               min='0'
               type='number'
@@ -94,13 +103,17 @@ const MyForm = () => {
               value={totalAmount === 0 ? '' : totalAmount}
               placeholder='0'
               onChange={(e) => handleTotalAmountChange(e, setFieldValue)}
+              className='input'
             />
           </div>
-
           {/* Dynamic rendering of participant fields */}
           {members.map((member, index) => (
-            <div key={index}>
-              <label htmlFor={`participants.${index}.amount`}>
+            <div key={index} className='field-container'>
+              {' '}
+              {/* Apply container class */}
+              <label htmlFor={`participants.${index}.amount`} className='label'>
+                {' '}
+                {/* Apply label class */}
                 {member.name} Amount:
               </label>
               <Field
@@ -127,22 +140,28 @@ const MyForm = () => {
                     e.preventDefault();
                   }
                 }}
+                className='input'
               />
             </div>
           ))}
-
-          <div>
-            <label htmlFor='amountLeft'>Amount Left:</label>
+          <div className='field-container'>
+            <label htmlFor='amountLeft' className='label'>
+              Amount Left:
+            </label>
             <Field
               type='number'
               id='amountLeft'
               name='amountLeft'
               value={remainingAmount}
               disabled
+              className='input-disable'
             />
           </div>
-
-          <button type='submit' disabled={remainingAmount !== 0}>
+          <button
+            type='submit'
+            disabled={remainingAmount !== 0}
+            className='button'
+          >
             Submit
           </button>
         </Form>
