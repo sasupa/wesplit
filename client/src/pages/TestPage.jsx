@@ -71,13 +71,37 @@ const MyForm = () => {
         divisionType: 'splitEqually',
       }}
       onSubmit={(values, { resetForm }) => {
-        console.log(values);
-        // Perform any submission logic here
-        // Then reset the form
+        // Calculate the amount each participant should receive if split equally
+        const equalAmount =
+          values.divisionType === 'splitEqually'
+            ? values.totalAmount / values.participants.length
+            : 0;
+
+        // Update participant amounts with the equal amount if split type is 'split equally'
+        const updatedParticipantAmounts = values.participants.map(
+          (participant) => ({
+            ...participant,
+            amount:
+              values.divisionType === 'splitEqually'
+                ? equalAmount.toFixed(2)
+                : participant.amount,
+          })
+        );
+
+        // Prepare the data to be sent to the backend
+        const formData = {
+          totalAmount: values.totalAmount,
+          splitType: values.divisionType,
+          participants: updatedParticipantAmounts,
+        };
+
+        console.log(formData);
+
+        // Reset the form after successful submission
         setTotalAmount(0);
         setRemainingAmount(0);
         setParticipantAmounts(
-          participantAmounts.map((participant) => ({
+          updatedParticipantAmounts.map((participant) => ({
             id: participant.id,
             amount: 0,
           }))
@@ -174,7 +198,9 @@ const MyForm = () => {
 
           <button
             type='submit'
-            disabled={remainingAmount !== 0}
+            disabled={
+              values.divisionType === 'manualDivision' && remainingAmount !== 0
+            }
             className='button'
           >
             Submit
