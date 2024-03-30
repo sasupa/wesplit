@@ -7,6 +7,7 @@ const MyForm = () => {
   const [totalAmount, setTotalAmount] = useState(0); // User set
   const [remainingAmount, setRemainingAmount] = useState(0); // Calculated
   const [participantAmounts, setParticipantAmounts] = useState([]); // User set, containing IDs and amounts
+  const [divisionType, setDivisionType] = useState('splitEqually'); // User set, containing IDs and amounts
 
   // Total Amount change handler
   const handleTotalAmountChange = (e, setFieldValue) => {
@@ -48,9 +49,9 @@ const MyForm = () => {
 
   // Dummy members for dynamic rendering and naming – LATER
   const members = [
-    { id: 1, name: 'Member 1' },
-    { id: 2, name: 'Member 2' },
-    { id: 3, name: 'Member 3' },
+    { id: 1, name: 'Sasu' },
+    { id: 2, name: 'Taavi' },
+    { id: 3, name: 'Jannerson' },
     // Add more members here dynamically if needed
   ];
 
@@ -67,6 +68,7 @@ const MyForm = () => {
         totalAmount: '',
         amountLeft: '',
         participants: participantAmounts,
+        divisionType: 'splitEqually',
       }}
       onSubmit={(values, { resetForm }) => {
         console.log(values);
@@ -85,14 +87,8 @@ const MyForm = () => {
     >
       {({ values, setFieldValue }) => (
         <Form className='form-container'>
-          {' '}
-          {/* Apply container class */}
           <div className='field-container'>
-            {' '}
-            {/* Apply container class */}
             <label htmlFor='totalAmount' className='label'>
-              {' '}
-              {/* Apply label class */}
               Total Amount:
             </label>
             <Field
@@ -106,44 +102,62 @@ const MyForm = () => {
               className='input'
             />
           </div>
+
+          {/* Select field for division type */}
+          <div className='field-container'>
+            <label htmlFor='divisionType' className='label'>
+              Division Type:
+            </label>
+            <Field
+              as='select'
+              id='divisionType'
+              name='divisionType'
+              className='input select'
+              onChange={(e) => setFieldValue('divisionType', e.target.value)}
+            >
+              <option value='splitEqually'>Split Equally</option>
+              <option value='manualDivision'>Manual Division</option>
+            </Field>
+          </div>
+
           {/* Dynamic rendering of participant fields */}
-          {members.map((member, index) => (
-            <div key={index} className='field-container'>
-              {' '}
-              {/* Apply container class */}
-              <label htmlFor={`participants.${index}.amount`} className='label'>
-                {' '}
-                {/* Apply label class */}
-                {member.name} Amount:
-              </label>
-              <Field
-                type='number'
-                id={`participants.${index}.amount`}
-                name={`participants.${index}.amount`}
-                value={participantAmounts[index].amount || ''}
-                placeholder='0'
-                onChange={(e) =>
-                  handleParticipantChange(e, index, setFieldValue)
-                }
-                inputMode='numeric'
-                pattern='[0-9]*'
-                onKeyPress={(e) => {
-                  // Allow only numeric input, backspace, and arrow keys
-                  const allowedKeys = [
-                    'Backspace',
-                    'ArrowLeft',
-                    'ArrowRight',
-                    'ArrowUp',
-                    'ArrowDown',
-                  ];
-                  if (!/\d/.test(e.key) && !allowedKeys.includes(e.key)) {
-                    e.preventDefault();
+          {values.divisionType === 'manualDivision' &&
+            members.map((member, index) => (
+              <div key={index} className='field-container'>
+                <label
+                  htmlFor={`participants.${index}.amount`}
+                  className='label'
+                >
+                  {member.name} Amount:
+                </label>
+                <Field
+                  type='number'
+                  id={`participants.${index}.amount`}
+                  name={`participants.${index}.amount`}
+                  value={participantAmounts[index].amount || ''}
+                  placeholder='0'
+                  onChange={(e) =>
+                    handleParticipantChange(e, index, setFieldValue)
                   }
-                }}
-                className='input'
-              />
-            </div>
-          ))}
+                  inputMode='numeric'
+                  pattern='[0-9]*'
+                  onKeyPress={(e) => {
+                    const allowedKeys = [
+                      'Backspace',
+                      'ArrowLeft',
+                      'ArrowRight',
+                      'ArrowUp',
+                      'ArrowDown',
+                    ];
+                    if (!/\d/.test(e.key) && !allowedKeys.includes(e.key)) {
+                      e.preventDefault();
+                    }
+                  }}
+                  className='input'
+                />
+              </div>
+            ))}
+
           <div className='field-container'>
             <label htmlFor='amountLeft' className='label'>
               Amount Left:
@@ -157,6 +171,7 @@ const MyForm = () => {
               className='input-disable'
             />
           </div>
+
           <button
             type='submit'
             disabled={remainingAmount !== 0}

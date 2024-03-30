@@ -19,16 +19,20 @@
   text-align: right;
 }
 
-.input {
+.input,
+.select,
+.checkbox {
   padding: 5px;
   border-radius: 5px;
   border: 1px solid #ccc;
+  width: 150px; /* Adjust the width as needed */
 }
 
 .input-disable {
   padding: 5px;
   border-radius: 5px;
   border: 1px solid #ccc;
+  width: 150px; /* Adjust the width as needed */
   background: gainsboro;
 }
 
