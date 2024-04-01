@@ -1,74 +1,214 @@
-import { useState } from 'react';
-import Button from 'react-bootstrap/Button';
-import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
-import * as Yup from 'yup';
+import React, { useState } from 'react';
+import { Formik, Form, Field } from 'formik';
+import '../components/NewExpenseComponents/MyForm.css'; // Import the CSS file
 
-import Modal from 'react-bootstrap/Modal';
-import NewExpenseForm from '../components/NewExpenseComponents/NewExpenseForm';
-//TEST
-import AddExpenseForm from '../components/AddExpenseForm/AddExpenseForm';
+const MyForm = () => {
+  // Local states to keep track of the numbers
+  const [totalAmount, setTotalAmount] = useState(0); // User set
+  const [remainingAmount, setRemainingAmount] = useState(0); // Calculated
+  const [participantAmounts, setParticipantAmounts] = useState([]); // User set, containing IDs and amounts
+  const [divisionType, setDivisionType] = useState('splitEqually'); // User set, containing IDs and amounts
 
-const TestPage = () => {
-  const [show, setShow] = useState(false);
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-  const navigate = useNavigate();
+  // Total Amount change handler
+  const handleTotalAmountChange = (e, setFieldValue) => {
+    const newValue = parseFloat(e.target.value);
 
-  const handleSubmit = (values, { resetForm }) => {
-    try {
-      // Handle form submission here
-      console.log('Form values:', values);
-      toast.success('Expense added ✅ ');
-      resetForm();
-      handleClose();
-      navigate('/groups'); // add navigation to the same group when merging
-    } catch (err) {
-      console.log(err);
-    }
+    // Update total amount and remaining amount
+    setTotalAmount(newValue);
+
+    // Calculates the remaining sum. Reduce() subtracts all sums from an array
+    const newRemainingAmount =
+      newValue - participantAmounts.reduce((acc, curr) => acc + curr.amount, 0);
+
+    setRemainingAmount(newRemainingAmount);
+    setFieldValue('totalAmount', newValue);
+    setFieldValue('amountLeft', newRemainingAmount);
   };
 
-  const initialValues = {
-    //firstName: '',
-    //lastName: '',
-    //email: '',
-    creator: '',
-    group: '', //can we add it here?
-    description: '',
-    amount: '',
-    payer: '',
-    divisionType: 'split equally',
-    shares: '',
+  // Participant amount change handler
+  const handleParticipantChange = (e, index, setFieldValue) => {
+    const newParticipantAmounts = [...participantAmounts];
+    const newValue = parseFloat(e.target.value);
+
+    // Update participant amount
+    newParticipantAmounts[index].amount = newValue || 0; // If the value is empty, treat it as 0
+
+    // Recalculate remaining amount
+    const newRemainingAmount =
+      totalAmount -
+      newParticipantAmounts.reduce((acc, curr) => acc + curr.amount, 0);
+
+    setRemainingAmount(newRemainingAmount);
+    setParticipantAmounts(newParticipantAmounts);
+    setFieldValue(
+      `participants.${index}.amount`,
+      newParticipantAmounts[index].amount
+    );
+    setFieldValue('amountLeft', newRemainingAmount);
   };
 
-  const validationSchema = Yup.object({
-    // firstName: Yup.string().min(1, 'Invalid name').required('Required'),
-    // email: Yup.string().email('Invalid email address').required('Required'),
-    // password: Yup.string()
-    //   .required('No password provided.')
-    //   .min(8, 'Password is too short - should be 8 chars minimum.'),
-  });
+  // Dummy members for dynamic rendering and naming – LATER
+  const members = [
+    { id: 1, name: 'Sasu' },
+    { id: 2, name: 'Taavi' },
+    { id: 3, name: 'Jannerson' },
+    // Add more members here dynamically if needed
+  ];
+
+  // Initialize participant amounts with IDs and zero amounts
+  useState(() => {
+    setParticipantAmounts(
+      members.map((member) => ({ id: member.id, amount: 0 }))
+    );
+  }, []);
 
   return (
-    <>
-      <Button variant='primary' onClick={handleShow}>
-        Add new expense
-      </Button>
+    <Formik
+      initialValues={{
+        totalAmount: '',
+        amountLeft: '',
+        participants: participantAmounts,
+        divisionType: 'splitEqually',
+      }}
+      onSubmit={(values, { resetForm }) => {
+        // Calculate the amount each participant should receive if split equally
+        const equalAmount =
+          values.divisionType === 'splitEqually'
+            ? values.totalAmount / values.participants.length
+            : 0;
 
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Add new expense</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <NewExpenseForm
-            initialValues={initialValues}
-            handleSubmit={handleSubmit}
-            validationSchema={validationSchema}
-          />
-        </Modal.Body>
-      </Modal>
-    </>
+        // Update participant amounts with the equal amount if split type is 'split equally'
+        const updatedParticipantAmounts = values.participants.map(
+          (participant) => ({
+            ...participant,
+            amount:
+              values.divisionType === 'splitEqually'
+                ? equalAmount.toFixed(2)
+                : participant.amount,
+          })
+        );
+
+        // Prepare the data to be sent to the backend
+        const formData = {
+          totalAmount: values.totalAmount,
+          splitType: values.divisionType,
+          participants: updatedParticipantAmounts,
+        };
+
+        console.log(formData);
+
+        // Reset the form after successful submission
+        setTotalAmount(0);
+        setRemainingAmount(0);
+        setParticipantAmounts(
+          updatedParticipantAmounts.map((participant) => ({
+            id: participant.id,
+            amount: 0,
+          }))
+        );
+        resetForm();
+      }}
+    >
+      {({ values, setFieldValue }) => (
+        <Form className='form-container'>
+          <div className='field-container'>
+            <label htmlFor='totalAmount' className='label'>
+              Total Amount:
+            </label>
+            <Field
+              min='0'
+              type='number'
+              id='totalAmount'
+              name='totalAmount'
+              value={totalAmount === 0 ? '' : totalAmount}
+              placeholder='0'
+              onChange={(e) => handleTotalAmountChange(e, setFieldValue)}
+              className='input'
+            />
+          </div>
+
+          {/* Select field for division type */}
+          <div className='field-container'>
+            <label htmlFor='divisionType' className='label'>
+              Division Type:
+            </label>
+            <Field
+              as='select'
+              id='divisionType'
+              name='divisionType'
+              className='input select'
+              onChange={(e) => setFieldValue('divisionType', e.target.value)}
+            >
+              <option value='splitEqually'>Split Equally</option>
+              <option value='manualDivision'>Manual Division</option>
+            </Field>
+          </div>
+
+          {/* Dynamic rendering of participant fields */}
+          {values.divisionType === 'manualDivision' &&
+            members.map((member, index) => (
+              <div key={index} className='field-container'>
+                <label
+                  htmlFor={`participants.${index}.amount`}
+                  className='label'
+                >
+                  {member.name} Amount:
+                </label>
+                <Field
+                  type='number'
+                  id={`participants.${index}.amount`}
+                  name={`participants.${index}.amount`}
+                  value={participantAmounts[index].amount || ''}
+                  placeholder='0'
+                  onChange={(e) =>
+                    handleParticipantChange(e, index, setFieldValue)
+                  }
+                  inputMode='numeric'
+                  pattern='[0-9]*'
+                  onKeyPress={(e) => {
+                    const allowedKeys = [
+                      'Backspace',
+                      'ArrowLeft',
+                      'ArrowRight',
+                      'ArrowUp',
+                      'ArrowDown',
+                    ];
+                    if (!/\d/.test(e.key) && !allowedKeys.includes(e.key)) {
+                      e.preventDefault();
+                    }
+                  }}
+                  className='input'
+                />
+              </div>
+            ))}
+
+          <div className='field-container'>
+            <label htmlFor='amountLeft' className='label'>
+              Amount Left:
+            </label>
+            <Field
+              type='number'
+              id='amountLeft'
+              name='amountLeft'
+              value={remainingAmount}
+              disabled
+              className='input-disable'
+            />
+          </div>
+
+          <button
+            type='submit'
+            disabled={
+              values.divisionType === 'manualDivision' && remainingAmount !== 0
+            }
+            className='button'
+          >
+            Submit
+          </button>
+        </Form>
+      )}
+    </Formik>
   );
 };
 
-export default TestPage;
+export default MyForm;
