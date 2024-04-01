@@ -10,9 +10,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-        
       - name: Pull latest changes from repository
         run: |
           ssh -i ${{ secrets.SSH_PRIVATE_KEY_PATH }} ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_HOST }} 'cd Documents/GitHub/wesplit && git pull'
