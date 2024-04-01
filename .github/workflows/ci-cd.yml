@@ -12,7 +12,7 @@ jobs:
     steps:
       - name: Pull latest changes from repository
         run: |
-          ssh -i ${{ secrets.SSH_PRIVATE_KEY_PATH }} ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_HOST }} 'cd Documents/GitHub/wesplit && git pull'
+          ssh -i ${{ secrets.SSH_PRIVATE_KEY_PATH }} -p 2222 ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_HOST }} 'cd Documents/GitHub/wesplit && git pull'
 
       - name: Install server dependencies
         run: |
