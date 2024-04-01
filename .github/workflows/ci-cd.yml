@@ -14,11 +14,11 @@ jobs:
         run: |
           ssh -i ${{ secrets.SSH_PRIVATE_KEY_PATH }} -p 2222 ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_HOST }} 'cd Documents/GitHub/wesplit && git pull'
 
-      - name: Install server dependencies
+      - name: Install/update server dependencies
         run: |
           ssh -i ${{ secrets.SSH_PRIVATE_KEY_PATH }} -p 2222 ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_HOST }} 'cd Documents/GitHub/wesplit && npm install'
 
-      - name: Install client dependencies
+      - name: Install/update client dependencies
         run: |
           ssh -i ${{ secrets.SSH_PRIVATE_KEY_PATH }} -p 2222 ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_HOST }} 'cd Documents/GitHub/wesplit/client && npm install'
 
