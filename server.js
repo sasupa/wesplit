@@ -7,7 +7,7 @@ import cors from 'cors'; // allow cross-origin requests
 import cookieParser from 'cookie-parser';
 
 const corsOptions = {
-  origin: 'http://localhost:3000',
+  origin: ['http://localhost:3000', 'http://192.168.100.22:3000', 'http://hatemyshit.com:3000'],
   credentials: true,
 };
 
