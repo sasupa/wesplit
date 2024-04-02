@@ -52,7 +52,7 @@ jobs:
           port: 2222
           timeout: 300s
           script: |
-           cd Documents/GitHub/wesplit && npm run dev
+           cd Documents/GitHub/wesplit && npm run dev &
 
       - name: Start client
         uses: appleboy/ssh-action@v1.0.0
@@ -63,4 +63,4 @@ jobs:
           port: 2222
           timeout: 300s
           script: |
-           cd Documents/GitHub/wesplit/client && npm start
+           cd Documents/GitHub/wesplit/client && npm run start &
