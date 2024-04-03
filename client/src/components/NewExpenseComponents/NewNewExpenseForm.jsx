@@ -137,8 +137,6 @@ const NewExpenseForm = ({
                     value={remainingAmount}
                     disabled
                   />
-
-                  <Field />
                 </div>
 
                 <Button type='submit' variant='primary'>
