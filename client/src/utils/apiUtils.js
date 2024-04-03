@@ -53,7 +53,7 @@ export const fetchGroupTransactions = async (groupID) => {
 // Function to test API
 export const testAPI = async () => {
   try {
-    const response = await fetch(`http://localhost:5100/`, { method: 'GET' });
+    const response = await fetch(BASE_URL, { method: 'GET' });
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
