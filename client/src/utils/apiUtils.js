@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // apiUtils.js
-const BASE_URL = 'http://localhost:5100/wesplit/api/v1';
+const BASE_URL = 'http://hatemyshit.com:5100/wesplit/api/v1';
 
 // Function to fetch groups with userId
 export const fetchGroups = async (id) => {
