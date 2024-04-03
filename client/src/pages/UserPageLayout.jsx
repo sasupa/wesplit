@@ -6,7 +6,7 @@ import axios from 'axios';
 export const loader = async () => {
   try {
     const { data } = await axios.get(
-      'http://localhost:5100/wesplit/api/v1/users/get-current-user',
+      'http://hatemyshit.com:5100/wesplit/api/v1/users/get-current-user',
       {
         withCredentials: true, // Include cookies in the request
       }
