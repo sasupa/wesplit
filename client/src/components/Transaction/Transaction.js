@@ -22,7 +22,7 @@ const Transaction = ({ amount, description, date, shares }) => {
           <div key={index}>
           <i className="fa fa-money" aria-hidden="true"></i>
           <span className="user-margin">
-            {share.userId}: {share.share.$numberDecimal} 
+            {share.shareholderId}: {share.share} 
           </span>
           <br></br>
           </div>

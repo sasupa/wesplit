@@ -5,7 +5,7 @@ const { Schema } = mongoose;
 const TransactionSchema = new Schema(
   {
     description: String,
-    amount: mongoose.Types.Decimal128,
+    amount: String,
     divisionType: {
       type: String,
       enum: ['split equally', 'manual division', 'checkout'],
@@ -16,7 +16,7 @@ const TransactionSchema = new Schema(
     shares: [
       {
         shareholderId: { type: Schema.Types.ObjectId, ref: 'User' }, // Debug
-        share: mongoose.Types.Decimal128,
+        share: String,
       },
     ],
   },

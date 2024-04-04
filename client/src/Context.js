@@ -10,7 +10,7 @@ export const ContextProvider = ({ children }) => {
     // USER PLACEHOLDER
     { name: "undefined"},
     // GROUP PLACEHOLDER
-    {name: null, members:[], transactions: []},
+    {name: "", members:[], transactions: []},
   ]);
 
   // Function to update context

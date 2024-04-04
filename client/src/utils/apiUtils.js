@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-// apiUtils.js
-const BASE_URL = 'http://hatemyshit.com:5100/wesplit/api/v1';
+// apiUtils.js, for deploying 'http://hatemyshit.com:5100/wesplit/api/v1'
+const BASE_URL = 'http://localhost:5100/wesplit/api/v1';
 
 // Function to fetch groups with userId
 export const fetchGroups = async (id) => {
@@ -49,6 +49,62 @@ export const fetchGroupTransactions = async (groupID) => {
     throw error;
   }
 };
+
+// Functions to add member to a group
+export const addUserToGroup = async (groupId, userId) => {
+  try {
+    // Prepare the request options including method, headers, and body
+    const requestOptions = {
+      method: 'POST', // Using POST method to send data
+      headers: {
+        'Content-Type': 'application/json', // Indicating the type of content being sent
+      },
+      body: JSON.stringify({ groupId, userId }), // Stringify your payload
+    };
+
+    // Include requestOptions with fetch call
+    const response = await fetch(`${BASE_URL}/group/add`, requestOptions);
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data; // Return the response data
+  } catch (error) {
+    console.error('Failed to add user to group:', error);
+    throw error; // Rethrowing the error might be useful if you want to handle it further up the call chain
+  }
+};
+
+// Functions to remove member to a group
+export const RemoveMemberFromGroup = async (groupId, userId) => {
+  try {
+    // Prepare the request options including method, headers, and body
+    const requestOptions = {
+      method: 'POST', // Using POST method to send data
+      headers: {
+        'Content-Type': 'application/json', // Indicating the type of content being sent
+      },
+      body: JSON.stringify({ groupId, userId }), // Stringify your payload
+    };
+
+    // Include requestOptions with fetch call
+    const response = await fetch(`${BASE_URL}/group/remove`, requestOptions);
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    console.log(data);
+    return data; // Return the response data
+  } catch (error) {
+    console.error('Failed to remove user to group:', error);
+    throw error; // Rethrowing the error might be useful if you want to handle it further up the call chain
+  }
+};
+
 
 // Function to test API
 export const testAPI = async () => {
