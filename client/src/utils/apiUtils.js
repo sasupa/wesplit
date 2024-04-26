@@ -177,3 +177,22 @@ export const logout = async () => {
     throw error;
   }
 };
+
+export const createTransaction = async (values) => {
+  console.log(values);
+  try {
+    const response = await axios.post(`${BASE_URL}/transactions`, values, {
+      withCredentials: true,
+    });
+
+    if (response.status >= 200 && response.status < 300) {
+      return response.data; // You might want to return specific data from the response
+    } else {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+  } catch (error) {
+    console.error('Something failed', error.message);
+    // You might want to handle the error differently depending on your app's needs
+    throw error;
+  }
+};

@@ -40,6 +40,9 @@ export const createTransaction = async (req, res) => {
     }
   });
 
+  // Update group transaction list
+  group.transactions.push(newTransaction._id);
+
   // Save the updated group
   const updatedGroup = await group.save();
   console.log(updatedGroup); // For debugging

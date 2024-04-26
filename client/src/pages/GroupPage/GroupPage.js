@@ -13,10 +13,12 @@ import AddUserCard from "../../components/AddUserCard/AddUserCard.js";
 import Transaction from "../../components/Transaction/Transaction.js";
 import "font-awesome/css/font-awesome.min.css";
 import "./GroupPage.css";
-import ExpenseModal from "../../components/NewExpenseComponents/ExpenseModal.jsx";
+import ExpenseModal from "../../components/ExpenseModal/ExpenseModal.js";
 import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner.js";
+import { useOutletContext } from 'react-router-dom';
 
 const GroupPage = () => {
+  const user = useOutletContext();
   const [error, setError] = useState(null);
   const [show, setShow] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -95,7 +97,6 @@ const GroupPage = () => {
       .then((data) => {
         setGroup(data.group);
         setLoading(false);
-        console.log(data.group);
         /*
         let newState = [...contextValue];
         newState[newState.length - 1] = data.group;
@@ -112,50 +113,55 @@ const GroupPage = () => {
     return (
       <Container className="py-5">
         <Row className="justify-content-center mb-3">
-          <h1 className="text-center mb-4">
-            <i className="fa fa-users icon-space" aria-hidden="true"></i>
-            {group.name}
-          </h1>
+          <Col md={8} lg={6}>
+            <h1 className="text-center mb-4">
+              <i className="fa fa-users icon-space" aria-hidden="true"></i>
+              {group.name}
+            </h1>
 
-          {group.members.map((member, index) =>
-            !showRemove ? (
-              <UserCard
-                key={index}
-                username={member.userId?.name || "Loading..."}
-                balance={parseFloat(member.balance)}
-                showRemove={handleShowRemoveUser}
-              />
-            ) : (
-              <RemoveUserCard
-                key={index}
-                id={member.userId?._id || "Loading..."}
-                username={member.userId.name}
-                remove={handleRemoveUser}
-              />
-            )
-          )}
+            {group.members.map((member, index) =>
+              !showRemove ? (
+                <UserCard
+                  key={index}
+                  username={member.userId?.name || "Loading..."}
+                  balance={parseFloat(member.balance)}
+                  showRemove={handleShowRemoveUser}
+                />
+              ) : (
+                <RemoveUserCard
+                  key={index}
+                  id={member.userId?._id || "Loading..."}
+                  username={member.userId.name}
+                  remove={handleRemoveUser}
+                />
+              )
+            )}
 
-          <AddUserCard addUser={handleAddUser} />
+            <AddUserCard addUser={handleAddUser} />
+          </Col>
         </Row>
 
         {/* Add Expense */}
-        <Row className="justify-content-center transaction-margin">
-          <Button variant="primary" onClick={handleShow}>
-            Add new expense
-          </Button>
-          <ExpenseModal
-            show={show}
-            handleClose={handleClose}
-            navigate={navigate}
-            group={group}
-            /*
+        <Row className="justify-content-center mb-3">
+          <Col md={8} lg={6} className="mx-auto">
+            <Button variant="primary" onClick={handleShow}>
+              Add new expense
+            </Button>
+            <ExpenseModal
+              show={show}
+              handleClose={handleClose}
+              navigate={navigate}
+              group={group}
+              user={user}
+              /*
           group={contextValue[2]}*/
-          />
+            />
+          </Col>
         </Row>
 
         {/* Transactions List */}
         <Row className="justify-content-center">
-          <Col xs={10} md={8}>
+          <Col className="justify-content-center" xs={10} md={8} lg={6}>
             <h2>Latest transactions in {group.name}</h2>
             <br></br>
             {group.transactions.map((transaction, index) => (

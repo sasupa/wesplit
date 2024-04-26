@@ -12,7 +12,6 @@ import GroupsPage from './pages/GroupsPage/GroupsPage.js';
 import HomeLayout from './pages/HomeLayout.jsx';
 import { loader as groupsPageLoader } from './pages/GroupPageLayout.jsx';
 import { loader as userPageLoader } from './pages/UserPageLayout.jsx';
-import TestPage from './pages/TestPage.jsx';
 import './App.css';
 
 const router = createBrowserRouter([
@@ -56,11 +55,7 @@ const router = createBrowserRouter([
           {
             path: ':groupId',
             element: <GroupPage />,
-          },
-          {
-            path: 'test',
-            element: <TestPage />,
-          },
+          }
         ],
       },
     ],
