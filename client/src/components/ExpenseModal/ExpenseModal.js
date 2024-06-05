@@ -1,19 +1,18 @@
-import React, { useState } from "react";
-import Modal from "react-bootstrap/Modal";
-import * as Yup from "yup";
-import NewExpenseForm from "./NewNewExpenseForm";
-import { toast } from "react-toastify";
-import _ from "lodash";
-import { Formik, Form, Field } from "formik";
-import "./ExpenseModal.css";
-import { createTransaction } from "../../utils/apiUtils";
+import React, { useState } from 'react';
+import Modal from 'react-bootstrap/Modal';
 
-const ExpenseModal = ({ show, handleClose, navigate, group, user }) => {
+import { toast } from 'react-toastify';
+import _ from 'lodash';
+import { Formik, Form, Field } from 'formik';
+import './ExpenseModal.css';
+import { createTransaction } from '../../utils/apiUtils';
+
+const ExpenseModal = ({ show, handleClose, group, user }) => {
   // Local states to keep track of the numbers
   const [amount, setAmount] = useState(0); // User set
   const [remainingAmount, setRemainingAmount] = useState(0); // Calculated
   const [participantAmounts, setParticipantAmounts] = useState([]); // User set, containing IDs and amounts
-  const [divisionType, setDivisionType] = useState("splitEqually"); // User set, containing IDs and amounts
+  const [divisionType, setDivisionType] = useState('splitEqually'); // User set, containing IDs and amounts
 
   // Dummy members for dynamic rendering and naming – LATER
   const members = [];
@@ -34,8 +33,8 @@ const ExpenseModal = ({ show, handleClose, navigate, group, user }) => {
 
     const fixedNewRemainingAmount = Number(newRemainingAmount.toFixed(2));
     setRemainingAmount(fixedNewRemainingAmount);
-    setFieldValue("amount", newValue);
-    setFieldValue("amountLeft", newRemainingAmount);
+    setFieldValue('amount', newValue);
+    setFieldValue('amountLeft', newRemainingAmount);
   };
 
   // Participant amount change handler
@@ -57,7 +56,7 @@ const ExpenseModal = ({ show, handleClose, navigate, group, user }) => {
       `participants.${index}.share`,
       newParticipantAmounts[index].share
     );
-    setFieldValue("amountLeft", newRemainingAmount);
+    setFieldValue('amountLeft', newRemainingAmount);
   };
 
   // Initialize participant amounts with IDs and zero amounts
@@ -75,19 +74,19 @@ const ExpenseModal = ({ show, handleClose, navigate, group, user }) => {
       <Modal.Body>
         <Formik
           initialValues={{
-            description: "",
-            amount: "",
+            description: '',
+            amount: '',
             group: group._id,
             creator: user._id,
             payer: group.members[0].userId._id,
-            amountLeft: "",
+            amountLeft: '',
             shares: participantAmounts,
-            divisionType: "split equally",
+            divisionType: 'split equally',
           }}
-          onSubmit={(values, { resetForm }) => {
+          onSubmit={async (values, { resetForm }) => {
             // Calculate the amount each participant should receive if split equally
             const equalAmount =
-              values.divisionType === "split equally"
+              values.divisionType === 'split equally'
                 ? values.amount / values.shares.length
                 : 0;
 
@@ -96,7 +95,7 @@ const ExpenseModal = ({ show, handleClose, navigate, group, user }) => {
               (participant) => ({
                 ...participant,
                 share:
-                  values.divisionType === "split equally"
+                  values.divisionType === 'split equally'
                     ? equalAmount.toFixed(2)
                     : participant.share,
               })
@@ -113,69 +112,70 @@ const ExpenseModal = ({ show, handleClose, navigate, group, user }) => {
               shares: updatedParticipantAmounts,
             };
 
-            console.log(formData);
-            createTransaction(formData)
-              .then((data) => {
-                console.log(data);
-                // Reset the form after successful submission
-                setAmount(0);
-                setRemainingAmount(0);
-                setParticipantAmounts(
-                  updatedParticipantAmounts.map((participant) => ({
-                    shareholderId: participant.id,
-                    share: 0,
-                  }))
-                );
-                resetForm();
-              })
-              .catch((data) => {
-                console.log(data);
-                alert("vituiks man");
-              });
+            try {
+              const data = await createTransaction(formData);
+              console.log(data);
+              // Reset the form after successful submission
+              setAmount(0);
+              setRemainingAmount(0);
+              setParticipantAmounts(
+                updatedParticipantAmounts.map((participant) => ({
+                  shareholderId: participant.id,
+                  share: 0,
+                }))
+              );
+              resetForm();
+              toast.success('Expense added!');
+              handleClose();
+            } catch (error) {
+              toast.error(error?.response?.data?.msg);
+              resetForm();
+              return error;
+            }
           }}
         >
           {({ values, setFieldValue }) => (
-            <Form className="form-container">
-              <div className="field-container">
-                <label htmlFor="Description" className="label">
+            <Form className='form-container'>
+              <div className='field-container'>
+                <label htmlFor='Description' className='label'>
                   Description:
                 </label>
                 <Field
-                  type="text"
-                  id="description"
-                  name="description"
+                  type='text'
+                  id='description'
+                  name='description'
                   placeholder="What's the expense?"
-                  className="input"
+                  className='input'
                 />
               </div>
-              <div className="field-container">
-                <label htmlFor="amount" className="label">
+              <div className='field-container'>
+                <label htmlFor='amount' className='label'>
                   Total Amount:
                 </label>
                 <Field
-                  min="0"
-                  type="number"
-                  id="amount"
-                  name="amount"
-                  value={amount === 0 ? "" : amount}
-                  placeholder="0"
+                  min='0'
+                  type='number'
+                  id='amount'
+                  name='amount'
+                  value={amount === 0 ? '' : amount}
+                  placeholder='0'
                   onChange={(e) => handleTotalAmountChange(e, setFieldValue)}
-                  className="input"
-                  step="0.01" // Allows decimal increments of 0.01
+                  className='input'
+                  step='0.01' // Allows decimal increments of 0.01
                 />
               </div>
 
               {/* Select field for payer */}
-              <div className="field-container">
-                <label htmlFor="payer" className="label">
+              <div className='field-container'>
+                <label htmlFor='payer' className='label'>
                   Payer:
                 </label>
                 <Field
-                  as="select"
-                  id="payer"
-                  name="payer"
-                  className="input select"
-                  onChange={(e) => setFieldValue("payer", e.target.value)}
+                  as='select'
+                  id='payer'
+                  name='payer'
+                  className='input select'
+                  onChange={(e) => setFieldValue('payer', e.target.value)}
                 >
                   {group.members.map((member, index) => {
                     return (
@@ -188,73 +188,73 @@ const ExpenseModal = ({ show, handleClose, navigate, group, user }) => {
               </div>
 
               {/* Select field for division type */}
-              <div className="field-container">
-                <label htmlFor="divisionType" className="label">
+              <div className='field-container'>
+                <label htmlFor='divisionType' className='label'>
                   Division Type:
                 </label>
                 <Field
-                  as="select"
-                  id="divisionType"
-                  name="divisionType"
-                  className="input select"
+                  as='select'
+                  id='divisionType'
+                  name='divisionType'
+                  className='input select'
                   onChange={(e) =>
-                    setFieldValue("divisionType", e.target.value)
+                    setFieldValue('divisionType', e.target.value)
                   }
                 >
-                  <option value="split equally">Split Equally</option>
-                  <option value="manual division">Manual Division</option>
+                  <option value='split equally'>Split Equally</option>
+                  <option value='manual division'>Manual Division</option>
                 </Field>
               </div>
 
               {/* Dynamic rendering of participant fields */}
-              {values.divisionType === "manual division" &&
+              {values.divisionType === 'manual division' &&
                 members.map((member, index) => (
-                  <div key={index} className="field-container">
+                  <div key={index} className='field-container'>
                     <label
                       htmlFor={`participants.${index}.share`}
-                      className="label"
+                      className='label'
                     >
                       {member.name} Share:
                     </label>
                     <Field
-                      type="number"
+                      type='number'
                       id={`participants.${index}.share`}
                       name={`participants.${index}.share`}
-                      value={participantAmounts[index].share || ""}
-                      placeholder="0"
+                      value={participantAmounts[index].share || ''}
+                      placeholder='0'
                       onChange={(e) =>
                         handleParticipantChange(e, index, setFieldValue)
                       }
-                      inputMode="numeric"
-                      className="input"
-                      step="0.01" // Allows decimal increments of 0.01
+                      inputMode='numeric'
+                      className='input'
+                      step='0.01' // Allows decimal increments of 0.01
                     />
                   </div>
                 ))}
-              {values.divisionType === "manual division" ? (
-                <div className="field-container">
-                  <label htmlFor="amountLeft" className="label">
+              {values.divisionType === 'manual division' ? (
+                <div className='field-container'>
+                  <label htmlFor='amountLeft' className='label'>
                     Amount Left:
                   </label>
                   <Field
-                    type="number"
-                    id="amountLeft"
-                    name="amountLeft"
+                    type='number'
+                    id='amountLeft'
+                    name='amountLeft'
                     value={remainingAmount}
                     disabled
-                    className="input-disable"
-                    step="0.01" // Allows decimal increments of 0.01
+                    className='input-disable'
+                    step='0.01' // Allows decimal increments of 0.01
                   />
                 </div>
               ) : null}
 
               <button
-                type="submit"
+                type='submit'
                 disabled={
-                  values.divisionType === "manual division" &&
+                  values.divisionType === 'manual division' &&
                   remainingAmount !== 0
                 }
-                className="button"
+                className='button'
               >
                 Submit
               </button>
