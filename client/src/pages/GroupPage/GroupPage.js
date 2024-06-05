@@ -160,7 +160,7 @@ const GroupPage = () => {
         </Row>
 
         {/* Transactions List */}
-        <Row className="justify-content-center">
+        <Row className="justify-content-center transaction-margin">
           <Col className="justify-content-center" xs={10} md={8} lg={6}>
             <h2>Latest transactions in {group.name}</h2>
             <br></br>
