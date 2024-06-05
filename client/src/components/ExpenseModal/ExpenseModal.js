@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import * as Yup from "yup";
-import NewExpenseForm from "./NewNewExpenseForm";
 import { toast } from "react-toastify";
 import _ from "lodash";
 import { Formik, Form, Field } from "formik";
