@@ -10,8 +10,20 @@ export const groupPopulateMiddleware = async (req, res, next) => {
       .populate("admins")
       .populate("invitedMembers")
       .populate("members.userId")
-      .populate("transactions")
-      .populate("transactions.payer");
+      .populate({
+        path: "transactions",
+        populate: [
+          {
+            path: "payer",
+            model: "User"
+          },
+          {
+            path: "shares.shareholderId",
+            model: "User"
+          }
+        ]
+      });
+      // 65a81c8d7f34d3d8aab7f1fd
 
     if (!group) {
       return res.status(404).json({ message: "Group NOT found" });

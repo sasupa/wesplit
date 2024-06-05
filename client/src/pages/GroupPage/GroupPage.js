@@ -171,6 +171,8 @@ const GroupPage = () => {
                 amount={transaction.amount}
                 description={transaction.description}
                 shares={transaction.shares}
+                transaction={transaction}
+                group={group}
               />
             ))}
           </Col>
